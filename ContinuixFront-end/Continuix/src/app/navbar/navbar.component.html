@@ -1,0 +1,156 @@
+<div id="kt_app_sidebar" class="app-sidebar d-flex flex-column" 
+     data-kt-drawer="true" 
+     data-kt-drawer-name="app-sidebar" 
+     data-kt-drawer-activate="{default: true, lg: false}" 
+     data-kt-drawer-overlay="true" 
+     data-kt-drawer-width="250px" 
+     data-kt-drawer-direction="start" 
+     data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle"
+     style="height: 100vh;">
+
+  <!-- Logo -->
+  <div class="app-sidebar-logo d-none d-lg-flex flex-stack flex-shrink-0 px-8" id="kt_app_sidebar_logo">
+    <a href="../../../index.html">
+      <img alt="Logo" src="assets/images/f705b9857587fd6soprasteria_soprahr_rvb-Photoroom1.png" class="theme-light-show h-80px">
+    </a>
+    <div class="ms-5"></div>
+  </div>
+
+  <div class="separator d-none d-lg-block"></div>
+
+  <!-- MENU - Scrollable -->
+  <div class="app-sidebar-menu hover-scroll-y my-5 mx-3" 
+       id="kt_app_sidebar_menu_wrapper" 
+       data-kt-scroll="true" 
+       data-kt-scroll-height="auto" 
+       data-kt-scroll-dependencies="#kt_app_sidebar_logo" 
+       data-kt-scroll-offset="0"
+       style="flex-grow: 1; overflow-y: auto;">
+
+    <div class="menu menu-column menu-sub-indention menu-active-bg fw-semibold" id="#kt_sidebar_menu" data-kt-menu="true">
+
+<!-- Notification Management -->
+<div *ngIf="displayNotificationManagment"
+     data-kt-menu-trigger="click"
+     class="menu-item menu-accordion"
+     [class.show]="isNotificationMenuOpen">
+
+<span class="menu-link" (click)="isNotificationMenuOpen = !isNotificationMenuOpen">
+  <span class="menu-title">Notification Management</span>
+</span>
+
+  <div class="menu-sub menu-sub-accordion">
+    <div *ngIf="displaySendNotification" class="menu-item">
+      <a class="menu-link" [routerLink]="'/SendNotification'" [class.active]="router.url.includes('/SendNotification')">
+        <span class="menu-title">Send Notification</span>
+      </a>
+    </div>
+    <div *ngIf="displayNotificationHistory" class="menu-item">
+      <a class="menu-link" [routerLink]="'/Notification-History'" [class.active]="router.url.includes('/Notification-History')">
+        <span class="menu-title">Notification History</span>
+      </a>
+    </div>
+    <div *ngIf="displayConfirmationStatus" class="menu-item">
+      <a class="menu-link" [routerLink]="'/dashboard'" [class.active]="router.url.includes('/dashboard')">
+        <span class="menu-title">Confirmation Status</span>
+      </a>
+    </div>
+ <div *ngIf="displayConsultNotification && notification" class="menu-item">
+  <a class="menu-link" [routerLink]="['/notificationConsult', notification.id]" [class.active]="router.url.includes('/notifications/consult')">
+    <span class="menu-title">Consult Notification</span>
+  </a>
+</div>
+
+  </div>
+</div>
+
+<!-- User Management -->
+<div *ngIf="displayUserManagment" 
+     data-kt-menu-trigger="click"
+     class="menu-item menu-accordion"
+     [class.show]="isUserMenuOpen">
+
+  <span class="menu-link" (click)="isUserMenuOpen = !isUserMenuOpen">
+    <span class="menu-title">User Management</span>
+  </span>
+
+  <div class="menu-sub menu-sub-accordion">
+    <div class="menu-item">
+      <a class="menu-link" [routerLink]="'/list'" [class.active]="router.url.includes('/list')">
+        <span class="menu-title">User Overview</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- PCA Management -->
+<div *ngIf="displayPcaManagment" 
+     data-kt-menu-trigger="click"
+     class="menu-item menu-accordion"
+     [class.show]="isPcaMenuOpen">
+
+  <span class="menu-link" (click)="isPcaMenuOpen = !isPcaMenuOpen">
+    <span class="menu-title">PCA Management</span>
+  </span>
+
+  <div class="menu-sub menu-sub-accordion">
+    <div class="menu-item">
+      <a class="menu-link" [routerLink]="'/PCA'" [class.active]="router.url.includes('/PCA')">
+        <span class="menu-title">PCA</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Management -->
+<div *ngIf="displayAlerteManagment" 
+     data-kt-menu-trigger="click"
+     class="menu-item menu-accordion"
+     [class.show]="isAlertMenuOpen">
+
+  <span class="menu-link" (click)="isAlertMenuOpen = !isAlertMenuOpen">
+    <span class="menu-title">Alert Management</span>
+  </span>
+
+  <div class="menu-sub menu-sub-accordion">
+    <div class="menu-item">
+      <a class="menu-link" [routerLink]="'/alerte'" [class.active]="router.url.includes('/Alerte')">
+        <span class="menu-title">Alert</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+      
+    </div>
+  </div>
+
+  <!-- FOOTER - Collé en bas -->
+  <div class="app-sidebar-footer p-3 border-top">
+    <div class="d-flex align-items-center gap-3 bg-light rounded shadow-sm p-3">
+      <!-- Avatar avec initiale -->
+      <div class="avatar bg-primary text-white rounded-circle d-flex justify-content-center align-items-center" 
+           style="width: 40px; height: 40px; font-weight: 700; font-size: 1.2rem;">
+        {{ (username?.charAt(0) ?? 'U').toUpperCase() }}
+      </div>
+
+      <!-- Infos utilisateur -->
+      <div class="user-info flex-grow-1">
+        <a href="#" class="d-block text-dark fw-bold text-decoration-none mb-1 user-name-hover">
+          {{ username || 'Utilisateur' }}
+        </a>
+        <small class="text-muted">{{ role || 'Rôle inconnu' }}</small>
+      </div>
+
+      <!-- Bouton logout icône -->
+      <button (click)="logout()" class="btn btn-outline-danger btn-sm">
+        <i class="bi bi-box-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- Bouton texte logout -->
+    <button (click)="logout()" class="btn btn-sm btn-danger w-100 mt-3">
+      Déconnexion
+    </button>
+  </div>
+</div>

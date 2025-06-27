@@ -1,0 +1,87 @@
+/* Styles pour la table et les éléments */
+.table-row-dashed tr {
+  border-bottom: 1px dashed #ffffff;
+}
+.text-gray-600 {
+  color: #000000 !important;
+}
+.text-gray-800 {
+  color: #000000 !important;
+}
+.text-hover-primary:hover {
+  color: #a1989800;
+}
+.fw-semibold {
+  font-weight: 500;
+}
+.fw-bold {
+  font-weight: 700;
+}
+.fs-6 {
+  font-size: 1rem;
+}
+.fs-7 {
+  font-size: 0.875rem;
+}
+.text-uppercase {
+  text-transform: uppercase;
+}
+.min-w-125px {
+  min-width: 125px;
+}
+.w-10px {
+  width: 10px;
+}
+.form-control-solid {
+  background-color: #faf5f5;
+  border-color: #f5f8fa;
+  
+}
+.table-container {
+  max-height: 550px; /* ou une autre valeur selon ton besoin */
+  overflow-y: auto;
+  overflow-x: auto;
+background-color:#e1d2d2f3 !important;
+}
+
+/* Garde les en-têtes visibles si tu veux sticky */
+.table-container thead th {
+  position: sticky;
+  top: 0;
+  background-color:#a1989800 !important; /* Même couleur que la table */
+  z-index: 1;
+}
+.action-button {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.custom-dropdown {
+  position: absolute;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  padding: 8px;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 4px 10px;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f2f2f2;
+}
+
+.text-danger {
+  color: #e60000;
+}

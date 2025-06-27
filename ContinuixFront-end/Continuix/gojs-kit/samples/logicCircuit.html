@@ -1,0 +1,910 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
+
+<meta name="description" content="A simple logic circuit editor and simulator." />
+<meta itemprop="description" content="A simple logic circuit editor and simulator." />
+<meta property="og:description" content="A simple logic circuit editor and simulator." />
+<meta name="twitter:description" content="A simple logic circuit editor and simulator." />
+
+
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="../assets/css/style.css">
+<!-- Copyright 1998-2025 by Northwoods Software Corporation. -->
+
+
+<meta itemprop="name" content="Logic Circuit Diagram with Simple Simulation" />
+<meta property="og:title" content="Logic Circuit Diagram with Simple Simulation" />
+<meta name="twitter:title" content="Logic Circuit Diagram with Simple Simulation" />
+
+
+<meta property="og:image" content="https://gojs.net/latest/assets/images/screenshots/logiccircuit.png" />
+<meta itemprop="image" content="https://gojs.net/latest/assets/images/screenshots/logiccircuit.png" />
+<meta name="twitter:image" content="https://gojs.net/latest/assets/images/screenshots/logiccircuit.png" />
+
+<meta property="og:url" content="https://gojs.net/latest/samples/logicCircuit.html" />
+<meta property="twitter:url" content="https://gojs.net/latest/samples/logicCircuit.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:type" content="website" />
+<meta property="twitter:domain" content="gojs.net" />
+
+    <title>
+      Logic Circuit Diagram with Simple Simulation | GoJS Diagramming Library
+    </title>
+  </head>
+
+  <body>
+    <!-- This top nav is not part of the sample code -->
+    <nav id="navTop" class=" w-full h-[var(--topnav-h)] z-30 bg-white border-b border-b-gray-200">
+  <div class="max-w-screen-xl mx-auto flex flex-wrap items-start justify-between px-4">
+    <a class="text-white bg-nwoods-primary font-bold !leading-[calc(var(--topnav-h)_-_1px)] my-0 px-2 text-4xl lg:text-5xl logo"
+       href="../">
+      GoJS
+    </a>
+    <div class="relative">
+      <button id="topnavButton" class="h-[calc(var(--topnav-h)_-_1px)] px-2 m-0 text-gray-900 bg-inherit shadow-none md:hidden hover:!bg-inherit hover:!text-nwoods-accent hover:!shadow-none" aria-label="Navigation">
+        <svg class="h-7 w-7 block" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div id="topnavList" class="hidden md:block">
+        <div class="absolute right-0 z-30 flex flex-col items-end rounded border border-gray-200 p-4 pl-12 shadow bg-white text-gray-900 font-semibold
+                    md:flex-row md:space-x-4 md:items-start md:border-0 md:p-0 md:shadow-none md:bg-inherit">
+          <a href="../learn/">Learn</a>
+          <a href="../samples/">Samples</a>
+          <a href="../intro/">Intro</a>
+          <a href="../api/">API</a>
+          <a href="../download.html">Download</a>
+          <a href="https://forum.nwoods.com/c/gojs/11" target="_blank" rel="noopener">Forum</a>
+          <a id="tc" href="https://nwoods.com/contact.html"
+            target="_blank" rel="noopener" onclick="getOutboundLink('https://nwoods.com/contact.html', 'contact');">Contact</a>
+          <a id="tb" href="https://nwoods.com/sales/index.html"
+            target="_blank" rel="noopener" onclick="getOutboundLink('https://nwoods.com/sales/index.html', 'buy');">Buy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    // topnav
+    var topButton = document.getElementById("topnavButton");
+    var topnavList = document.getElementById("topnavList");
+    if (topButton && topnavList) {
+      topButton.addEventListener("click", function (e) {
+        topnavList
+          .classList
+          .toggle("hidden");
+        e.stopPropagation();
+      });
+      document.addEventListener("click", function (e) {
+        // if the clicked element isn't the list, close the list
+        if (!topnavList.classList.contains("hidden") && !e.target.closest("#topnavList")) {
+          topButton.click();
+        }
+      });
+
+      // set active <a> element
+      var url = window
+        .location
+        .href
+        .toLowerCase();
+      var aTags = topnavList.getElementsByTagName('a');
+      for (var i = 0; i < aTags.length; i++) {
+        var lowerhref = aTags[i]
+          .href
+          .toLowerCase();
+        if (url.startsWith(lowerhref)) {
+          aTags[i]
+            .classList
+            .add('active');
+          break;
+        }
+      }
+    }
+  });
+</script>
+    <div class="flex flex-col prose">
+      <div class="w-full max-w-screen-xl mx-auto">
+        <!-- * * * * * * * * * * * * * -->
+        <!-- Start of GoJS sample code -->
+        <script src="https://cdn.jsdelivr.net/npm/gojs@3.0.22"></script>
+
+        
+
+        <div id="allSampleContent" class="p-4 w-full">
+          
+            
+            
+
+<script src="../extensions/Figures.js"></script>
+<script src="../extensions/AvoidsLinksRouter.js"></script>
+
+<script id="code">
+  const red = '#b91c1c';
+  const red2 = '#fca5a5';
+  const green = '#15803d';
+  const green2 = '#86efac';
+
+  const gray = '#cbd5e1';
+  const darkGray = '#334155';
+
+  function init() {
+    myDiagram = new go.Diagram('myDiagramDiv', {
+      'draggingTool.isGridSnapEnabled': true, // dragged nodes will snap to a grid of 10x10 cells
+      'undoManager.isEnabled': true,
+      'grid.visible': true
+    });
+
+    const avoidLinksRouter = new AvoidsLinksRouter();
+    avoidLinksRouter.epsilonDistance = 6; // increase distance between links
+    myDiagram.routers.push(avoidLinksRouter);
+
+    // when the document is modified, add a "*" to the title and enable the "Save" button
+    myDiagram.addDiagramListener('Modified', (e) => {
+      const button = document.getElementById('saveModel');
+      if (button) button.disabled = !myDiagram.isModified;
+      const idx = document.title.indexOf('*');
+      if (myDiagram.isModified) {
+        if (idx < 0) document.title += '*';
+      } else {
+        if (idx >= 0) document.title = document.title.slice(0, idx);
+      }
+    });
+
+    const palette = new go.Palette('palette'); // create a new Palette in the HTML DIV element "palette"
+
+    // creates relinkable Links that will avoid crossing Nodes when possible and will jump over other Links in their paths
+    myDiagram.linkTemplate = new go.Link({
+      routing: go.Routing.AvoidsNodes,
+      curve: go.Curve.JumpOver,
+      corner: 3,
+      relinkableFrom: true,
+      relinkableTo: true,
+      selectionAdorned: false, // Links are not adorned when selected so that their color remains visible.
+      shadowOffset: new go.Point(0, 0),
+      shadowBlur: 5,
+      shadowColor: 'blue',
+      layerName: 'Background'
+    })
+      .bindObject('isShadowed', 'isSelected')
+      .add(new go.Shape({ name: 'SHAPE', strokeWidth: 3, stroke: red }));
+
+    // node template helpers
+    const sharedToolTip = go.GraphObject.build('ToolTip', {
+      'Border.figure': 'RoundedRectangle'
+    }).add(new go.TextBlock({ margin: 2 }).bind('text', '', (d) => d.category));
+
+    // define some common property settings
+    function nodeStyle() {
+      return {
+        selectionAdorned: false,
+        shadowOffset: new go.Point(0, 0),
+        shadowBlur: 15,
+        shadowColor: 'blue',
+        toolTip: sharedToolTip
+      };
+    }
+
+    function applyNodeBindings(node) {
+      node.bindTwoWay('location', 'loc', go.Point.parse, go.Point.stringify);
+      node.bindObject('isShadowed', 'isSelected');
+      return node;
+    }
+
+    function shapeStyle() {
+      return {
+        name: 'NODESHAPE',
+        fill: gray,
+        stroke: darkGray,
+        desiredSize: new go.Size(40, 40),
+        strokeWidth: 2
+      };
+    }
+
+    function portStyle(input, spot) {
+      return {
+        figure: 'Rectangle',
+        desiredSize: new go.Size(4, 4),
+        fill: darkGray,
+        stroke: 'transparent',
+        strokeWidth: 6,
+        fromLinkable: !input,
+        fromSpot: spot ?? new go.Spot(1, 0.5, -3, 0),
+        toSpot: spot ?? new go.Spot(0, 0.5, 3, 0),
+        toLinkable: input,
+        toMaxLinks: 1,
+        cursor: 'pointer'
+      };
+    }
+
+    // define templates for each type of node
+
+    const inputTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .set({
+        cursor: 'pointer',
+        margin: new go.Margin(-15, 0, 0, 0),
+        click: (e, obj) => {
+          if (e.diagram instanceof go.Palette) return;
+          e.diagram.startTransaction('Toggle Input');
+
+          const isOn = !obj.data.isOn;
+          myDiagram.model.setDataProperty(obj.data, 'isOn', isOn);
+
+          updateStates();
+          e.diagram.commitTransaction('Toggle Input');
+        }
+      })
+      .add(
+        new go.Shape(shapeStyle())
+          .set({
+            fill: go.Brush.lighten(green),
+            margin: 3,
+            strokeWidth: 1.5,
+            desiredSize: new go.Size(NaN, NaN),
+            scale: 1.75,
+            geometry: go.Geometry.parse('F M19.5 3 L19.875 3 C20.4963 3 21 3.5037000000000003 21 4.125 L21 6.375 C21 6.9963 20.4963 7.5 19.875 7.5 L19.5 7.5 M2.25 10.5 L17.25 10.5 C18.4926 10.5 19.5 9.4926 19.5 8.25 L19.5 2.25 C19.5 1.0073600000000003 18.4926 0 17.25 0 L2.25 0 C1.0073599999999998 0 0 1.0073600000000003 0 2.25 L0 8.25 C0 9.4926 1.0073599999999998 10.5 2.25 10.5z', true)
+          })
+            .bind('fill', 'isOn', isOn => go.Brush.lighten(isOn ? green : red)),
+        new go.Shape('BpmnEventError', {
+          alignment: new go.Spot(0.5, 0.5, -1, 0),
+          width: 18,
+          height: 10,
+          fill: green2,
+          strokeWidth: 0
+        })
+          .bind('fill', 'isOn', isOn => isOn ? green2 : red2),
+        new go.Shape(portStyle(false)) // the only port
+          .set({
+            opacity: 0,
+            portId: '',
+            alignment: new go.Spot(1, 0.5, -2, 0)
+          })
+      );
+
+    const switchTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .set({
+        shadowOffset: new go.Point(0, 0),
+        shadowBlur: 5,
+        margin: new go.Margin(-35, 0, 0, 0)
+      })
+      .add(
+        new go.Panel('Horizontal', {
+          // this prevents the ports from moving when the shape rotates
+          minSize: new go.Size(42, 60)
+        })
+          .add(
+            new go.Panel('Spot', {
+              isClipping: true
+            })
+              .add(
+                new go.Shape({fill: 'blue', strokeWidth: 0}),
+                new go.Panel({
+                  alignment: go.Spot.Left,
+                  alignmentFocus: go.Spot.Center,
+                  angle: 359.99 // rotate counter clock wise
+                })
+                  .add(
+                    new go.Shape({width: 1, height: 1}),
+                    new go.Shape(shapeStyle())
+                      .set({
+                        strokeWidth: 0,
+                        fill: green,
+                        width: 40,
+                        height: 4,
+                        position: new go.Point(40,0),
+                        shadowVisible: false
+                      })
+                  )
+                  .bind('angle', 'isOn', isOn => isOn ? 359.99 : 359.99 - 30)
+                  .trigger('angle', {
+                    duration: 250,
+                    easing: go.Animation.EaseOutQuad,
+                    finished: updateStates
+                  })
+              )
+          ),
+        // this rectangle is the clickable area
+        new go.Shape('Rectangle', {
+          fill: 'transparent',
+          // fill: 'skyblue',
+          // opacity: 0.6,
+          strokeWidth: 0,
+          width: 40,
+          height: 30,
+          alignment: go.Spot.Center,
+          alignmentFocus: new go.Spot(0.5, 1, 0, -8),
+          cursor: 'pointer',
+          click: (e, obj) => {
+            if (e.diagram instanceof go.Palette) return;
+            e.diagram.startTransaction('Toggle Switch');
+
+            while (obj.part && obj.part !== obj) obj = obj.part; // find node
+            const shp = obj.findObject('NODESHAPE');
+            const isOn = !obj.data.isOn;
+            myDiagram.model.setDataProperty(obj.data, 'isOn', isOn);
+
+            e.diagram.commitTransaction('Toggle Switch');
+            if (!obj.data.isOn)
+              updateStates();
+          }
+        }),
+        // ports
+        new go.Shape(portStyle(false)) // the only port
+          .set({
+            portId: 'out',
+            desiredSize: new go.Size(5, 5),
+            alignment: new go.Spot(1, 0.5)
+          }),
+        new go.Shape(portStyle(true)) // the only port
+          .set({
+            portId: 'in',
+            desiredSize: new go.Size(5, 5),
+            alignment: new go.Spot(0, 0.5)
+          })
+      );
+
+    // brush for the "light" in the LED
+    const outBrush = new go.Brush('Radial', {
+      0.0: 'rgba(255, 255, 255, 0.2)',
+      0.5: 'rgba(0,255,0,0.8)',
+      0.75: 'rgba(0,255,0,0.3)',
+      0.85: 'rgba(0,255,0,0.1)',
+      0.95: 'rgba(0,255,0,0.05)',
+      1: 'rgba(0,255,0,0)',
+      start: new go.Spot(0.5, 0.8)
+    })
+
+    const outputTemplate = new go.Node('Spot', nodeStyle())
+      .set({
+        isShadowed: true
+      })
+      .bindTwoWay('location', 'loc', go.Point.parse, go.Point.stringify)
+      .add(
+        new go.Panel('Spot')
+          .add(
+            new go.Shape('RoundedRectangle', {
+              fill: 'transparent',
+              parameter1: Infinity,
+              parameter2: 0b0011, // top rounded
+              width: 25,
+              height: 22,
+              strokeWidth: 2,
+              shadowVisible: false
+            }),
+            new go.Shape('Rectangle', {
+              alignment: go.Spot.Bottom,
+              alignmentFocus: new go.Spot(0.5, 0.8),
+              strokeWidth: 0,
+              fill: null,
+              width: 40,
+              height: 43
+            })
+              .bind('fill', 'isOn', isOn => isOn ? outBrush : 'transparent'),
+            new go.Shape('Rectangle', shapeStyle())
+              .set({
+                width: 32,
+                height: 15,
+                alignment: go.Spot.Bottom,
+                alignmentFocus: new go.Spot(0.5, 0, 0, 2)
+              })
+                .bindObject('shadowVisible', 'isSelected')
+          ),
+        new go.Shape(portStyle(true, new go.Spot(0.5, 1, 0, -3))).set({
+          // the only port
+          portId: '',
+          alignment: new go.Spot(0.5, 1)
+        })
+      );
+
+    const andTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .add(
+        new go.Shape('AndGate', shapeStyle()),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in1',
+          alignment: new go.Spot(0, 0.3)
+        }),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in2',
+          alignment: new go.Spot(0, 0.7)
+        }),
+        new go.Shape(portStyle(false)).set({
+          portId: 'out',
+          alignment: new go.Spot(1, 0.5)
+        })
+      );
+
+    const orTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .add(
+        new go.Shape('OrGate', shapeStyle()),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in1',
+          alignment: new go.Spot(0.16, 0.3)
+        }),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in2',
+          alignment: new go.Spot(0.16, 0.7)
+        }),
+        new go.Shape(portStyle(false)).set({
+          portId: 'out',
+          alignment: new go.Spot(1, 0.5)
+        })
+      );
+
+    const xorTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .add(
+        new go.Shape('XorGate', shapeStyle()),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in1',
+          alignment: new go.Spot(0.26, 0.3)
+        }),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in2',
+          alignment: new go.Spot(0.26, 0.7)
+        }),
+        new go.Shape(portStyle(false)).set({
+          portId: 'out',
+          alignment: new go.Spot(1, 0.5)
+        })
+      );
+
+    const norTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .add(
+        new go.Shape('NorGate', shapeStyle()),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in1',
+          alignment: new go.Spot(0.16, 0.3)
+        }),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in2',
+          alignment: new go.Spot(0.16, 0.7)
+        }),
+        new go.Shape(portStyle(false)).set({
+          portId: 'out',
+          opacity: 0,
+          alignment: new go.Spot(1, 0.5, -5, 0)
+        })
+      );
+
+    const xnorTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .add(
+        new go.Shape('XnorGate', shapeStyle()),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in1',
+          alignment: new go.Spot(0.26, 0.3)
+        }),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in2',
+          alignment: new go.Spot(0.26, 0.7)
+        }),
+        new go.Shape(portStyle(false)).set({
+          portId: 'out',
+          opacity: 0,
+          alignment: new go.Spot(1, 0.5, -5, 0)
+        })
+      );
+
+    const nandTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .add(
+        new go.Shape('NandGate', shapeStyle()),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in1',
+          alignment: new go.Spot(0, 0.3)
+        }),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in2',
+          alignment: new go.Spot(0, 0.7)
+        }),
+        new go.Shape(portStyle(false)).set({
+          portId: 'out',
+          opacity: 0,
+          alignment: new go.Spot(1, 0.5, -5, 0)
+        })
+      );
+
+    const notTemplate = applyNodeBindings(new go.Node('Spot', nodeStyle()))
+      .add(
+        new go.Shape('Inverter', shapeStyle()),
+        new go.Shape(portStyle(true)).set({
+          portId: 'in',
+          alignment: new go.Spot(0, 0.5)
+        }),
+        new go.Shape(portStyle(false)).set({
+          portId: 'out',
+          opacity: 0,
+          alignment: new go.Spot(1, 0.5, -5, 0)
+        })
+      );
+
+    // add the templates created above to myDiagram and palette
+    myDiagram.nodeTemplateMap.add('input', inputTemplate);
+    myDiagram.nodeTemplateMap.add('switch', switchTemplate);
+    myDiagram.nodeTemplateMap.add('output', outputTemplate);
+    myDiagram.nodeTemplateMap.add('and', andTemplate);
+    myDiagram.nodeTemplateMap.add('or', orTemplate);
+    myDiagram.nodeTemplateMap.add('xor', xorTemplate);
+    myDiagram.nodeTemplateMap.add('not', notTemplate);
+    myDiagram.nodeTemplateMap.add('nand', nandTemplate);
+    myDiagram.nodeTemplateMap.add('nor', norTemplate);
+    myDiagram.nodeTemplateMap.add('xnor', xnorTemplate);
+
+    // share the template map with the Palette
+    palette.nodeTemplateMap = myDiagram.nodeTemplateMap;
+
+    palette.model.nodeDataArray = [
+      { category: 'input', isOn: true },
+      { category: 'switch', isOn: true },
+      { category: 'output' },
+      { category: 'and' },
+      { category: 'or' },
+      { category: 'xor' },
+      { category: 'not' },
+      { category: 'nand' },
+      { category: 'nor' },
+      { category: 'xnor' }
+    ];
+
+    // load the initial diagram
+    load();
+
+    // continually update the diagram
+    loop();
+  }
+
+  // update the diagram every 250 milliseconds
+  function loop() {
+    setTimeout(() => {
+      updateStates();
+      loop();
+    }, 250);
+  }
+
+  // update the value and appearance of each node according to its type and input values
+  function updateStates() {
+    const oldskip = myDiagram.skipsUndoManager;
+    myDiagram.skipsUndoManager = true;
+    // do all "input" nodes first
+    myDiagram.nodes.each((node) => {
+      if (node.category === 'input') {
+        doInput(node);
+      }
+    });
+    // now we can do all other kinds of nodes
+    myDiagram.nodes.each((node) => {
+      switch (node.category) {
+        case 'switch':
+          doSwitch(node);
+          break;
+        case 'and':
+          doAnd(node);
+          break;
+        case 'or':
+          doOr(node);
+          break;
+        case 'xor':
+          doXor(node);
+          break;
+        case 'not':
+          doNot(node);
+          break;
+        case 'nand':
+          doNand(node);
+          break;
+        case 'nor':
+          doNor(node);
+          break;
+        case 'xnor':
+          doXnor(node);
+          break;
+        case 'output':
+          doOutput(node);
+          break;
+        case 'input':
+          break; // doInput already called, above
+      }
+    });
+    myDiagram.skipsUndoManager = oldskip;
+  }
+
+  // helper predicate
+  function linkIsTrue(link) {
+    // assume the given Link has a Shape named "SHAPE"
+    return link.findObject('SHAPE').stroke === green;
+  }
+
+  // helper function for propagating results
+  function setOutputLinks(node, color) {
+    node.findLinksOutOf().each((link) => (link.findObject('SHAPE').stroke = color));
+  }
+
+  // update nodes by the specific function for its type
+  // determine the color of links coming out of this node based on those coming in and node type
+
+  function doInput(node) {
+    setOutputLinks(node, node.data.isOn ? green : red);
+  }
+
+  function doSwitch(node) {
+    const linksInto = node.findLinksInto();
+    const color = linksInto.count > 0 && linksInto.all(linkIsTrue) ? green : red;
+    node.findObject('NODESHAPE').fill = color;
+    let ang = node.findObject('NODESHAPE').panel.angle;
+    let isGoodAngle = ang >= 357 || ang <= 3;
+    setOutputLinks(node, node.data.isOn && isGoodAngle ? color : red);
+  }
+
+  function doAnd(node) {
+    const linksInto = node.findLinksInto();
+    const color = linksInto.count > 0 && linksInto.all(linkIsTrue) && linksInto.count % 2 == 0 ? green : red;
+    setOutputLinks(node, color);
+  }
+  function doNand(node) {
+    const color = !node.findLinksInto().all(linkIsTrue) ? green : red;
+    setOutputLinks(node, color);
+  }
+  function doNot(node) {
+    const color = !node.findLinksInto().all(linkIsTrue) ? green : red;
+    setOutputLinks(node, color);
+  }
+
+  function doOr(node) {
+    const color = node.findLinksInto().any(linkIsTrue) ? green : red;
+    setOutputLinks(node, color);
+  }
+  function doNor(node) {
+    const color = !node.findLinksInto().any(linkIsTrue) ? green : red;
+    setOutputLinks(node, color);
+  }
+
+  function doXor(node) {
+    let truecount = 0;
+    node.findLinksInto().each((link) => {
+      if (linkIsTrue(link)) truecount++;
+    });
+    const color = truecount % 2 !== 0 ? green : red;
+    setOutputLinks(node, color);
+  }
+  function doXnor(node) {
+    let truecount = 0;
+    node.findLinksInto().each((link) => {
+      if (linkIsTrue(link)) truecount++;
+    });
+    const color = truecount % 2 === 0 ? green : red;
+    setOutputLinks(node, color);
+  }
+
+  function doOutput(node) {
+    // assume there is just one input link
+    // we just need to update the node's data.isOn
+    node.linksConnected.each((link) => {
+      myDiagram.model.setDataProperty(node.data, 'isOn', link.findObject('SHAPE').stroke == green);
+    });
+  }
+
+  // save a model to and load a model from JSON text, displayed below the Diagram
+  function save() {
+    document.getElementById('mySavedModel').value = myDiagram.model.toJson();
+    myDiagram.isModified = false;
+  }
+  function load() {
+    myDiagram.model = go.Model.fromJson(document.getElementById('mySavedModel').value);
+  }
+  window.addEventListener('DOMContentLoaded', init);
+</script>
+
+<div id="sample">
+  <div style="width: 100%; display: flex; justify-content: space-between">
+    <div
+      id="palette"
+      style="
+        width: 100px;
+        height: 600px;
+        margin-right: 2px;
+        background-color: #f3f4f6;
+        border: solid 1px black;
+      "></div>
+    <div id="myDiagramDiv" style="background-color: #f3f4f6; flex-grow: 1; height: 500px; border: solid 1px black"></div>
+  </div>
+  <p>
+    Try clicking on the switch or the battery to toggle them.
+  </p>
+  <p>
+    This logic circuit implements a three-bit adder (see
+    <a href="https://en.wikipedia.org/wiki/Adder_(electronics)">Wikipedia</a> for more information).
+    The switches connected to the batteries on the left side of the diagram are the inputs, and the
+    lamps at the top are the outputs. By opening or closing the switches, different numbers can be
+    added (up to 7+7=14!), with the lamps reflecting the sum of those numbers in real time.
+  </p>
+  <p>
+    This sample allows the user to make circuits using gates and wires, which are
+    updated whenever a Link is modified and at intervals by a looped setTimeout function.
+  </p>
+  <p>
+    The <b>updateStates</b> function calls a function to update each node according to type, which
+    uses the color of the links into the node to determine the color of those exiting it. Red means
+    zero or false; green means one or true. Clicking an input node (battery or switch) will toggle
+    true/false.
+  </p>
+  <p>
+    Mouse over a node to see its category, displayed using a shared <a>Adornment</a> set as the
+    tooltip. A <a>Palette</a> to the left of the main diagram allows the user to drag and drop new
+    nodes. These nodes can then be linked using ports which are defined on the various node
+    templates. Each input port can only have one input link, while output ports can have many output
+    links. This is controlled by the <a>GraphObject.toMaxLinks</a> property.
+  </p>
+  <div>
+    <div>
+      <button id="saveModel" onclick="save()">Save</button>
+      <button onclick="load()">Load</button>
+      Diagram Model saved in JSON format:
+    </div>
+    <textarea id="mySavedModel" style="width: 100%; height: 200px">
+      { "class": "GraphLinksModel",
+      "linkFromPortIdProperty": "fromPort",
+      "linkToPortIdProperty": "toPort",
+      "nodeDataArray": [
+    {"category":"xor","key":-1,"loc":"-230 -860"},
+    {"category":"xor","key":-2,"loc":"-120 -880"},
+    {"category":"and","key":-3,"loc":"-150 -810"},
+    {"category":"and","key":-4,"loc":"-150 -740"},
+    {"category":"switch","isOn":true,"key":-5,"loc":"-340 -890"},
+    {"category":"switch","isOn":true,"key":-6,"loc":"-320 -710"},
+    {"category":"or","key":-7,"loc":"-80 -780"},
+    {"category":"or","key":-8,"loc":"80 -550"},
+    {"category":"switch","isOn":true,"key":-9,"loc":"-210 -620"},
+    {"category":"switch","isOn":true,"key":-10,"loc":"-190 -680"},
+    {"category":"and","key":-11,"loc":"-10 -510"},
+    {"category":"and","key":-12,"loc":"-10 -580"},
+    {"category":"xor","key":-13,"loc":"-10 -650"},
+    {"category":"xor","key":-14,"loc":"-90 -630"},
+    {"category":"or","key":-15,"loc":"220 -370"},
+    {"category":"switch","isOn":true,"key":-16,"loc":"-130 -390"},
+    {"category":"switch","isOn":true,"key":-17,"loc":"-100 -440"},
+    {"category":"and","key":-18,"loc":"30 -370"},
+    {"category":"and","key":-19,"loc":"150 -420"},
+    {"category":"xor","key":-20,"loc":"150 -500"},
+    {"category":"xor","key":-21,"loc":"50 -450"},
+    {"category":"output","key":-22,"loc":"40 -950","isOn":true},
+    {"category":"output","key":-23,"loc":"90 -950","isOn":true},
+    {"category":"output","key":-24,"loc":"140 -950","isOn":false},
+    {"category":"output","key":-25,"loc":"-10 -950","isOn":true},
+    {"category":"switch","isOn":true,"key":-26,"loc":"-430 -690"},
+    {"category":"switch","isOn":true,"key":-27,"loc":"-430 -660"},
+    {"category":"switch","isOn":true,"key":-28,"loc":"-430 -630"},
+    {"category":"switch","isOn":true,"key":-29,"loc":"-430 -510"},
+    {"category":"switch","isOn":true,"key":-30,"loc":"-430 -480"},
+    {"category":"switch","isOn":true,"key":-31,"loc":"-430 -450"},
+    {"category":"input","isOn":true,"key":-32,"loc":"-520 -640"},
+    {"category":"input","isOn":true,"key":-33,"loc":"-520 -460"},
+    {"category":"input","isOn":false,"key":-34,"loc":"-480 -910"}
+    ],
+      "linkDataArray": [
+    {"from":-5,"to":-1,"fromPort":"out","toPort":"in1"},
+    {"from":-6,"to":-1,"fromPort":"out","toPort":"in2"},
+    {"from":-1,"to":-2,"fromPort":"out","toPort":"in2"},
+    {"from":-1,"to":-3,"fromPort":"out","toPort":"in1"},
+    {"from":-6,"to":-4,"fromPort":"out","toPort":"in2"},
+    {"from":-3,"to":-7,"fromPort":"out","toPort":"in1"},
+    {"from":-4,"to":-7,"fromPort":"out","toPort":"in2"},
+    {"from":-9,"to":-11,"fromPort":"out","toPort":"in2"},
+    {"from":-11,"to":-8,"fromPort":"out","toPort":"in2"},
+    {"from":-12,"to":-8,"fromPort":"out","toPort":"in1"},
+    {"from":-10,"to":-14,"fromPort":"out","toPort":"in1"},
+    {"from":-9,"to":-14,"fromPort":"out","toPort":"in2"},
+    {"from":-14,"to":-13,"fromPort":"out","toPort":"in1"},
+    {"from":-14,"to":-12,"fromPort":"out","toPort":"in1"},
+    {"from":-7,"to":-13,"fromPort":"out","toPort":"in2"},
+    {"from":-7,"to":-12,"fromPort":"out","toPort":"in2"},
+    {"from":-16,"to":-18,"fromPort":"out","toPort":"in2"},
+    {"from":-18,"to":-15,"fromPort":"out","toPort":"in2"},
+    {"from":-19,"to":-15,"fromPort":"out","toPort":"in1"},
+    {"from":-17,"to":-21,"fromPort":"out","toPort":"in1"},
+    {"from":-16,"to":-21,"fromPort":"out","toPort":"in2"},
+    {"from":-21,"to":-20,"fromPort":"out","toPort":"in1"},
+    {"from":-21,"to":-19,"fromPort":"out","toPort":"in1"},
+    {"from":-8,"to":-20,"fromPort":"out","toPort":"in2"},
+    {"from":-8,"to":-19,"fromPort":"out","toPort":"in2"},
+    {"from":-2,"to":-24,"fromPort":"out","toPort":""},
+    {"from":-13,"to":-23,"fromPort":"out","toPort":""},
+    {"from":-20,"to":-22,"fromPort":"out","toPort":""},
+    {"from":-15,"to":-25,"fromPort":"out","toPort":""},
+    {"from":-32,"to":-26,"fromPort":"","toPort":"in"},
+    {"from":-32,"to":-27,"fromPort":"","toPort":"in"},
+    {"from":-32,"to":-28,"fromPort":"","toPort":"in"},
+    {"from":-33,"to":-29,"fromPort":"","toPort":"in"},
+    {"from":-33,"to":-30,"fromPort":"","toPort":"in"},
+    {"from":-33,"to":-31,"fromPort":"","toPort":"in"},
+    {"from":-26,"to":-5,"fromPort":"out","toPort":"in"},
+    {"from":-29,"to":-6,"fromPort":"out","toPort":"in"},
+    {"from":-34,"to":-3,"fromPort":"","toPort":"in2"},
+    {"from":-27,"to":-10,"fromPort":"out","toPort":"in"},
+    {"from":-30,"to":-9,"fromPort":"out","toPort":"in"},
+    {"from":-28,"to":-17,"fromPort":"out","toPort":"in"},
+    {"from":-31,"to":-16,"fromPort":"out","toPort":"in"},
+    {"from":-10,"to":-11,"fromPort":"out","toPort":"in1"},
+    {"from":-17,"to":-18,"fromPort":"out","toPort":"in1"},
+    {"from":-5,"to":-4,"fromPort":"out","toPort":"in1"},
+    {"from":-34,"to":-2,"fromPort":"","toPort":"in1"}
+    ]}
+    </textarea>
+  </div>
+</div>
+          
+        </div>
+        <!-- * * * * * * * * * * * * * -->
+        <!--  End of GoJS sample code  -->
+      </div>
+
+      <div id="allTagDescriptions" class="p-4 w-full max-w-screen-xl mx-auto">
+        <hr/>
+        <h3 class="text-xl">GoJS Features in this sample</h3>
+        <!-- blacklist tags that do not correspond to a specific GoJS feature -->
+          
+            <h4>ToolTips</h4>
+<p>
+A tooltip is an <a href="../api/symbols/Adornment.html" target="api">Adornment</a> that is shown when the mouse hovers over an object that has its <a href="../api/symbols/GraphObject.html#toolTip" target="api">GraphObject.toolTip</a> set.
+The tooltip part is bound to the same data as the part itself.
+</p>
+<p>
+It is typical to implement a tooltip as a "ToolTip" Panel holding a <a href="../api/symbols/TextBlock.html" target="api">TextBlock</a> or a Panel of TextBlocks and other objects.
+Each "ToolTip" is just an "Auto" Panel <a href="../api/symbols/Adornment.html" target="api">Adornment</a> that is shadowed, and where the border is a rectangular <a href="../api/symbols/Shape.html" target="api">Shape</a> with a light gray fill.
+However you can implement the tooltip as any arbitrarily complicated Adornment.
+</p>
+<p>
+More information can be found in the <a href="../intro/toolTips.html">GoJS Intro</a>.
+</p>
+            <p>
+              <a href="../samples/index.html#tooltips">Related samples</a>
+            </p>
+            <hr>
+          
+        <!-- blacklist tags that do not correspond to a specific GoJS feature -->
+          
+            <h4>Palette</h4>
+<p>
+A <a href="../api/symbols/Palette.html" target="api">Palette</a> is a subclass of <a href="../api/symbols/Diagram.html" target="api">Diagram</a> that is used to display a number of <a href="../api/symbols/Part.html" target="api">Part</a>s that
+can be dragged into the diagram that is being modified by the user.
+The initialization of a <a href="../api/symbols/Palette.html" target="api">Palette</a> is just like the initialization of any <a href="../api/symbols/Diagram.html" target="api">Diagram</a>.
+Like Diagrams, you can have more than one Palette on the page at the same time.
+</p>
+<p>
+More information can be found in the <a href="../intro/palette.html">GoJS Intro</a>.
+</p>
+            <p>
+              <a href="../samples/index.html#palette">Related samples</a>
+            </p>
+            <hr>
+          
+        <!-- blacklist tags that do not correspond to a specific GoJS feature -->
+          
+            <h4>Grid Patterns</h4>
+<p>
+<b>GoJS</b> provides functionality to display a grid of lines drawn at regular intervals.
+Grid Panels can also force dragged parts to be aligned on grid points, and resize parts to be multiples of the grid cell size.
+</p>
+<p>
+Grids are implemented using a type of <a href="../api/symbols/Panel.html" target="api">Panel</a>, <a href="../api/symbols/PanelLayout.html#Grid" target="api">Panel.Grid</a>.
+Grid Panels, like most other types of Panels, can be used within <a href="../api/symbols/Node.html" target="api">Node</a>s or any other kind of <a href="../api/symbols/Part.html" target="api">Part</a>.
+However when they are used as the <a href="../api/symbols/Diagram.html#grid" target="api">Diagram.grid</a>, they are effectively infinite in extent.
+</p>
+<p>
+More information can be found in the <a href="../intro/grids.html">GoJS Intro</a>.
+</p>
+            <p>
+              <a href="../samples/index.html#grid">Related samples</a>
+            </p>
+            <hr>
+          
+        <!-- blacklist tags that do not correspond to a specific GoJS feature -->
+          
+        </div>
+    </div>
+  </body>
+  <!--  This script is part of the gojs.net website, and is not needed to run the sample -->
+  <script src="../assets/js/goSamples.js"></script>
+</html>

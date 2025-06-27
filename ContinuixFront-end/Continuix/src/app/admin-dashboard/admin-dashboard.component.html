@@ -1,0 +1,19 @@
+
+ <div class="container">
+        <h2>Accept/Reject Overview</h2>
+        <p *ngIf="orgChart.length === 0">Chargement des données...</p>
+        <p-organizationChart [value]="orgChart" [collapsible]="true" selectionMode="single">
+          <ng-template let-node pTemplate="default">
+            <div class="node" [ngStyle]="{'background-color': node.accepted ? 'lightgreen' : 'lightcoral'}">
+              <div><strong>{{ node.data?.name || node.label }}</strong></div>
+              <div>{{ node.data?.role || node.role }}</div>
+            </div>
+          </ng-template>
+        </p-organizationChart>
+      </div>
+
+
+
+
+
+ 

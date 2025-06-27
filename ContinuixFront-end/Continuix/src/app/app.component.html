@@ -1,0 +1,22 @@
+<div class="app-root">
+<div class="d-flex flex-column app-root" id="kt_app_root">
+  <!-- En-tête -->
+  <app-navbar *ngIf="showNavbar"></app-navbar>
+
+  <!-- Si showNavbar est vrai, on affiche sidebar + layout -->
+  <div *ngIf="showNavbar" class="d-flex flex-grow-1 app-layout">
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
+
+    <!-- Contenu principal -->
+    <div class="app-main-content" id="kt_app_main">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <!-- Sinon, on affiche uniquement le contenu -->
+  <div *ngIf="!showNavbar" class="flex-grow-1 w-100">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+</div>

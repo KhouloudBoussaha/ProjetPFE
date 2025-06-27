@@ -1,0 +1,16 @@
+.main-content {
+  /* Ce margin est déjà géré par #kt_app_main */
+  margin-left: 0;
+}
+
+.content-inner {
+  max-width: 100%;
+  overflow: visible;
+  height: auto;
+}
+.table-container {
+  max-height: 550px;
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: #e1d2d2f3 !important;
+}

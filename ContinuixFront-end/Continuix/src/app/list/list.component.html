@@ -1,0 +1,106 @@
+<div class="table-container">
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header border-0 pt-6">
+      <div class="card-title">
+      
+      </div>
+      <div class="card-toolbar">
+        <div class="d-flex justify-content-end">
+         
+          <button type="button" class="btn btn-primary" (click)="showForm = true">Add User</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste des utilisateurs -->
+    <div class="card-body py-4" *ngIf="!showForm">
+     
+        
+  
+          <table class="table align-middle table-row-dashed fs-6 gy-5">
+  <thead>
+    <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+      <th class="w-10px pe-2">
+        <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </th>
+      <th class="min-w-125px">User</th>
+      <th class="min-w-125px">Role</th>
+      <th class="min-w-125px">Supervisor ID</th>
+      <th class="text-end min-w-100px">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="text-gray-600 fw-semibold">
+    <tr *ngFor="let u of user">
+      <td>
+        <div class="form-check form-check-sm form-check-custom form-check-solid">
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </td>
+      <td class="d-flex align-items-center">
+        <div class="d-flex flex-column">
+          <span class="text-gray-800 mb-1">{{ u.username }}</span>
+          <span>{{ u.email }}</span>
+        </div>
+      </td>
+    <td>{{ getRoleName(u.role) }}</td>
+ <!-- ✅ Affiche le nom du rôle -->
+      <td>{{ u.supervisor }}</td>
+     
+<td class="text-end position-relative">
+  <button (click)="toggleActions(u.id)" class="action-button">
+    Actions ⌄
+  </button>
+
+  <div class="custom-dropdown" *ngIf="u.id === openedUserId">
+    <a (click)="editUser(u)" class="dropdown-item">Edit</a>
+    <a (click)="deleteUser(u.id)" class="dropdown-item text-danger">Delete</a>
+  </div>
+</td>
+
+
+      
+    </tr>
+  </tbody>
+</table>
+
+      
+    </div>
+
+    <!-- Formulaire ajout utilisateur -->
+    <div class="card-body py-4" *ngIf="showForm">
+      <h2 class="fw-bold">Add User</h2>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label class="form-label fw-semibold fs-6 required">Full Name</label>
+          <input type="text" class="form-control form-control-solid" formControlName="username" placeholder="username">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold fs-6 required">Email</label>
+          <input type="email" class="form-control form-control-solid" formControlName="email" placeholder="example@domain.com">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold fs-6 required">Supervisor ID</label>
+          <input type="text" class="form-control form-control-solid" formControlName="supervisor" placeholder="supervisor">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold fs-6 required">Role</label>
+          <div class="d-flex flex-column gap-3">
+            <div class="form-check" *ngFor="let r of roles">
+              <input class="form-check-input me-3" type="radio" [id]="'role_' + r.id" formControlName="role" [value]="r.id">
+              <label class="form-check-label fw-bold text-gray-800" [for]="'role_' + r.id">{{ r.name }}</label>
+            </div>
+          </div>
+        </div>
+        <div class="text-center pt-4">
+          <button type="button" class="btn btn-light me-3" (click)="showForm = false; onReset()">Discard</button>
+         <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Submit</button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
