@@ -38,28 +38,28 @@
             ]
           },
           "configurations": {
-            "production": {
-              "fileReplacements": [
+           "production": {
+  "fileReplacements": [
     {
       "replace": "src/environments/environment.ts",
       "with": "src/environments/environment.prod.ts"
     }
   ],
-             "budgets": [
-  {
-   "type": "initial",
-    "maximumWarning": "2mb",
-    "maximumError": "3mb"
-  },
-  {
-    "type": "anyComponentStyle",
-    "maximumWarning": "30kb",
-    "maximumError": "50kb"
-  }
-],
-
-              "outputHashing": "all"
-            },
+  "budgets": [
+    {
+      "type": "initial",
+      "maximumWarning": "2mb",
+      "maximumError": "3mb"
+    },
+    {
+      "type": "anyComponentStyle",
+      "maximumWarning": "30kb",
+      "maximumError": "50kb"
+    }
+  ],
+  "outputHashing": "all"
+}
+,
 "development": {
   "buildOptimizer": false,
   "optimization": false,

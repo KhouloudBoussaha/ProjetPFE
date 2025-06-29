@@ -5,6 +5,8 @@ import { Alerte } from './models/alerte';
 import { IncidentType } from './incident-type';
 import { environment } from 'src/environments/environments';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
