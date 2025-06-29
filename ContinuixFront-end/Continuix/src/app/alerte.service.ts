@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Alerte } from './models/alerte';
 import { IncidentType } from './incident-type';
-import { environment } from 'src/environments/environments';
+import { environment } from 'src/environments/environment';
 
 
 

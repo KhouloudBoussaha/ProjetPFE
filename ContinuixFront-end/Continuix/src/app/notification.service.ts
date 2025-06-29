@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Notification } from 'src/app/models/notification';
-import { environment } from 'src/environments/environments';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({

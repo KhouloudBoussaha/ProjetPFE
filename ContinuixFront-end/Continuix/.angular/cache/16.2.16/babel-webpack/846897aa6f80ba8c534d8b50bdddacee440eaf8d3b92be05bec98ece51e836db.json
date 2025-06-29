@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const environment = {\n  production: false,\n  apiUrl: 'http://localhost:8075' // Ton backend local\n};","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

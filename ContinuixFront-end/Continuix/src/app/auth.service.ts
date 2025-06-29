@@ -5,7 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environments';
+import { environment } from 'src/environments/environment';
 
 
 

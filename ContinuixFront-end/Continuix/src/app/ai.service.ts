@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { AiRequestDTO } from './ai-request-dto';
 import { Observable } from 'rxjs';
 import { PCA } from './models/PCA';
-import { environment } from 'src/environments/environments';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
