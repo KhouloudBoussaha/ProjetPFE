@@ -22,8 +22,8 @@ public class AiPredictionService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final PCAService pcaService;
 
-    private final String flaskApiUrl = "http://localhost:5001/predict";
-
+    private final String flaskApiUrl = "https://projetpfe-ai.onrender.com/predict";
+    
     public PCA predictAndFetchPCA(Notification notification) {
         int incidentEncoded = FeatureEncoder.encodeIncidentType(notification.getIncidentType());
         int impactEncoded = FeatureEncoder.encodeImpact(notification.getImpact());
