@@ -1,0 +1,1 @@
+{"ast":null,"code":"function classesToSelector(classes) {\n  if (classes === void 0) {\n    classes = '';\n  }\n  return `.${classes.trim().replace(/([\\.:!+\\/])/g, '\\\\$1') // eslint-disable-line\n  .replace(/ /g, '.')}`;\n}\nexport { classesToSelector as c };","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

@@ -5,14 +5,15 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environments';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8075/api/auth'; 
-
+  private apiUrl = `${environment.apiUrl}/api/auth`;
+  
   constructor(private http: HttpClient , private router: Router) {}
 
   /**

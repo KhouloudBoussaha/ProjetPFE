@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PCA } from './models/PCA';
+import { environment } from 'src/environments/environments';
 
 
 
@@ -9,8 +10,7 @@ import { PCA } from './models/PCA';
   providedIn: 'root'
 })
 export class PcaService {
-
-   private apiUrl = 'http://localhost:8075/api/pca'; 
+private apiUrl = `${environment.apiUrl}/api/pca`;
 
   constructor(private http: HttpClient) {}
 

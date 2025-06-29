@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Alerte } from './models/alerte';
 import { IncidentType } from './incident-type';
+import { environment } from 'src/environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlerteService {
-
-   private apiUrl = 'http://localhost:8075/api/alertes';
-
+private apiUrl = `${environment.apiUrl}/api/alertes`;
+   
   constructor(private http: HttpClient) { }
 
   getAllAlertes(): Observable<Alerte[]> {

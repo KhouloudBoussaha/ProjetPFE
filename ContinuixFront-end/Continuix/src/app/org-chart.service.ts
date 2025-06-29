@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { UserNode } from './user-node';
-
+import { environment } from 'src/environments/environments';
 @Injectable({
   providedIn: 'root'
 })
 export class OrgChartService {
-  private apiUrl = 'http://localhost:8075/notification/orgchart';
+ 
+  private apiUrl = `${environment.apiUrl}/notification/orgchart`;
 
   constructor(private http: HttpClient) {}
 
