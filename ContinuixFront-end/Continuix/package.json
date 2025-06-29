@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "postinstall": "chmod +x ./node_modules/.bin/ng",
    "build": "npx ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
