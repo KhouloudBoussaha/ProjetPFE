@@ -4,7 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tn.sopra.continuix.entities.Role;
-import tn.sopra.continuix.entities.User;
+import tn.sopra.continuix.entities.Users;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -27,16 +27,16 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user) {
-        GrantedAuthority authority = user.getRole() != null ?
-                new SimpleGrantedAuthority("ROLE_" + user.getRole().name()) :
+    public static UserDetailsImpl build(Users users) {
+        GrantedAuthority authority = users.getRole() != null ?
+                new SimpleGrantedAuthority("ROLE_" + users.getRole().name()) :
                 new SimpleGrantedAuthority("ROLE_USER"); // Default role if none provided
         return new UserDetailsImpl(
-                user.getId(),
-                user.getEmail(),
-                user.getUsername(),
-                user.getPassword(),
-                user.getRole(),
+                users.getId(),
+                users.getEmail(),
+                users.getUsername(),
+                users.getPassword(),
+                users.getRole(),
                 Collections.singletonList(authority)
         );
     }

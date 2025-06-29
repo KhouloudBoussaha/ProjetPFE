@@ -1,8 +1,6 @@
 package tn.sopra.continuix.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,10 +34,10 @@ public class User {
     @ManyToOne
     @JsonIgnore // 🛑 pour casser la récursion
     @JoinColumn(name = "supervisor_id")
-    private User supervisor;
+    private Users supervisor;
     @JsonIgnore
    @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL)
-   private List<User> subordinates;
+   private List<Users> subordinates;
 
 
 }

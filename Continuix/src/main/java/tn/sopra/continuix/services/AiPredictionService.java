@@ -23,7 +23,7 @@ public class AiPredictionService {
     private final PCAService pcaService;
 
     private final String flaskApiUrl = "https://projetpfe-ai.onrender.com/predict";
-    
+
     public PCA predictAndFetchPCA(Notification notification) {
         int incidentEncoded = FeatureEncoder.encodeIncidentType(notification.getIncidentType());
         int impactEncoded = FeatureEncoder.encodeImpact(notification.getImpact());

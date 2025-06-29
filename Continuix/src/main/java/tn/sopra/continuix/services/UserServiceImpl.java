@@ -44,29 +44,29 @@ public class UserServiceImpl {
 
 
 
-    public User getUserById(Long id) {
+    public Users getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + id));
     }
 
 
 
-    public User updateUser(Long id, User updatedUser) {
-        User existingUser = userRepository.findById(id)
+    public Users updateUser(Long id, Users updatedUsers) {
+        Users existingUsers = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + id));
 
         // Vérifier si l'email est utilisé par un autre utilisateur
-        Optional<User> userWithSameEmail = userRepository.findByEmail(updatedUser.getEmail());
+        Optional<Users> userWithSameEmail = userRepository.findByEmail(updatedUsers.getEmail());
         if (userWithSameEmail.isPresent() && !userWithSameEmail.get().getId().equals(id)) {
-            throw new IllegalArgumentException("L'email existe déjà : " + updatedUser.getEmail());
+            throw new IllegalArgumentException("L'email existe déjà : " + updatedUsers.getEmail());
         }
 
-        existingUser.setUsername(updatedUser.getUsername());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setRole(updatedUser.getRole());
+        existingUsers.setUsername(updatedUsers.getUsername());
+        existingUsers.setEmail(updatedUsers.getEmail());
+        existingUsers.setRole(updatedUsers.getRole());
 
         // Le mot de passe et le token ne sont pas modifiés ici
-        return userRepository.save(existingUser);
+        return userRepository.save(existingUsers);
     }
 
 
@@ -83,16 +83,16 @@ public class UserServiceImpl {
         // Puis supprimer l'utilisateur
         userRepository.deleteById(id);
     }
-    public UserDTO convertToDTO(User user) {
+    public UserDTO convertToDTO(Users users) {
         UserDTO dto = new UserDTO();
-        dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
-        dto.setEmail(user.getEmail());
-        dto.setRole(user.getRole());
-        if (user.getSupervisor() != null) {
-            dto.setSupervisor(user.getSupervisor().getId());
-            dto.setSupervisorName(user.getSupervisor().getUsername());
+        dto.setId(users.getId());
+        dto.setUsername(users.getUsername());
+        dto.setPassword(users.getPassword());
+        dto.setEmail(users.getEmail());
+        dto.setRole(users.getRole());
+        if (users.getSupervisor() != null) {
+            dto.setSupervisor(users.getSupervisor().getId());
+            dto.setSupervisorName(users.getSupervisor().getUsername());
         } else {
             dto.setSupervisor(null);
             dto.setSupervisorName(null);
@@ -101,22 +101,22 @@ public class UserServiceImpl {
     }
 
 
-    public List<User> getAllUsers() {
+    public List<Users> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public User assignSupervisor(Long userId, Long supervisorId) {
-        User user = userRepository.findById(userId)
+    public Users assignSupervisor(Long userId, Long supervisorId) {
+        Users users = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        User supervisor = userRepository.findById(supervisorId)
+        Users supervisor = userRepository.findById(supervisorId)
                 .orElseThrow(() -> new RuntimeException("Supervisor not found"));
 
-        if (!isValidHierarchy(user.getRole(), supervisor.getRole())) {
+        if (!isValidHierarchy(users.getRole(), supervisor.getRole())) {
             throw new RuntimeException("Invalid hierarchy");
         }
 
-        user.setSupervisor(supervisor);
-        return userRepository.save(user);
+        users.setSupervisor(supervisor);
+        return userRepository.save(users);
     }
 
     private boolean isValidHierarchy(Role userRole, Role supervisorRole) {
@@ -127,7 +127,7 @@ public class UserServiceImpl {
         if (userRole == Role.SECURITYAGENT && supervisorRole == Role.TEAMLEADER) return true;
         return false;
     }
-    public List<User> getSubordinates(Long userId) {
+    public List<Users> getSubordinates(Long userId) {
         return userRepository.findBySupervisorId(userId);
     }
 
@@ -138,71 +138,71 @@ public class UserServiceImpl {
 
 
     @Transactional
-    public User saveUser(User user) {
-        Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
+    public Users saveUser(Users users) {
+        Optional<Users> existingUserOpt = userRepository.findByEmail(users.getEmail());
         if (existingUserOpt.isPresent()) {
-            throw new IllegalArgumentException("L'email existe déjà : " + user.getEmail());
+            throw new IllegalArgumentException("L'email existe déjà : " + users.getEmail());
         }
 
-        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            String hashedPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(hashedPassword);
+        if (users.getPassword() != null && !users.getPassword().isEmpty()) {
+            String hashedPassword = passwordEncoder.encode(users.getPassword());
+            users.setPassword(hashedPassword);
         } else {
-            user.setPassword(null);
+            users.setPassword(null);
         }
 
-        String resetToken = jwtUtil.generateResetToken(user.getEmail());
-        user.setResetPasswordToken(resetToken);
-        user.setTokenExpirationDate(LocalDateTime.now().plusHours(24));
+        String resetToken = jwtUtil.generateResetToken(users.getEmail());
+        users.setResetPasswordToken(resetToken);
+        users.setTokenExpirationDate(LocalDateTime.now().plusHours(24));
 
-        User savedUser = userRepository.save(user);
+        Users savedUsers = userRepository.save(users);
 
         try {
-            emailService.sendPasswordResetEmail(savedUser.getEmail(), resetToken);
-            logger.info("Email envoyé à : {}", savedUser.getEmail());
+            emailService.sendPasswordResetEmail(savedUsers.getEmail(), resetToken);
+            logger.info("Email envoyé à : {}", savedUsers.getEmail());
         } catch (Exception e) {
-            logger.error("Erreur lors de l'envoi de l'email à {} : {}", savedUser.getEmail(), e.getMessage(), e);
+            logger.error("Erreur lors de l'envoi de l'email à {} : {}", savedUsers.getEmail(), e.getMessage(), e);
             throw new RuntimeException("Échec de l'envoi de l'email", e);
         }
 
-        return savedUser;
+        return savedUsers;
     }
 
 
-    public Optional<User> findById(Long id) {
+    public Optional<Users> findById(Long id) {
         return userRepository.findById(id);
     }
     public List<UserNodeDTO> getOrgChart() {
         // Récupérer l'unique admin
-        User admin = userRepository.findByRole(Role.Admin)
+        Users admin = userRepository.findByRole(Role.Admin)
                 .orElseThrow(() -> new IllegalStateException("No admin found"));
         return Collections.singletonList(buildUserNode(admin));
     }
 
-    private UserNodeDTO buildUserNode(User user) {
+    private UserNodeDTO buildUserNode(Users users) {
         UserNodeDTO node = new UserNodeDTO();
-        node.setId(user.getId());
-        node.setUsername(user.getUsername());
-        node.setRole(user.getRole().name());
-        node.setAccepted(hasAcceptedNotification(user.getId()));
-        node.setSubordinates(buildUserNodes(userRepository.findBySupervisorId(user.getId())));
+        node.setId(users.getId());
+        node.setUsername(users.getUsername());
+        node.setRole(users.getRole().name());
+        node.setAccepted(hasAcceptedNotification(users.getId()));
+        node.setSubordinates(buildUserNodes(userRepository.findBySupervisorId(users.getId())));
         return node;
     }
 
-    private List<UserNodeDTO> buildUserNodes(List<User> users) {
+    private List<UserNodeDTO> buildUserNodes(List<Users> users) {
         List<UserNodeDTO> nodes = new ArrayList<>();
-        for (User user : users) {
+        for (Users user : users) {
             nodes.add(buildUserNode(user));
         }
         return nodes;
     }
 
     private boolean hasAcceptedNotification(Long userId) {
-        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<Users> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) return false;
 
-        User user = userOpt.get();
-        List<NotificationRecipient> recipientRecords = notificationRecipientRepository.findByRecipient(user);
+        Users users = userOpt.get();
+        List<NotificationRecipient> recipientRecords = notificationRecipientRepository.findByRecipient(users);
         return recipientRecords.stream().anyMatch(rec -> Boolean.TRUE.equals(rec.getAccepted())
         );
     }
@@ -215,27 +215,27 @@ public class UserServiceImpl {
     }
     @Transactional
     public void resetPassword(String newPassword,String token) {
-        User user = userRepository.findByResetPasswordToken(token);
-        if (user == null) {
+        Users users = userRepository.findByResetPasswordToken(token);
+        if (users == null) {
             throw new IllegalArgumentException("Token invalide.");
         }
 
         // Vérifier si le token n'a pas expiré
-        if (user.getTokenExpirationDate() == null || user.getTokenExpirationDate().isBefore(LocalDateTime.now())) {
+        if (users.getTokenExpirationDate() == null || users.getTokenExpirationDate().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Le token a expiré.");
         }
 
         // Vérifier la validité du token avec JwtUtil
-        if (!jwtUtil.validateResetToken(token, user.getEmail())) {
+        if (!jwtUtil.validateResetToken(token, users.getEmail())) {
             throw new IllegalArgumentException("Token invalide ou non associé à cet utilisateur.");
         }
 
         // Mettre à jour le mot de passe
-        user.setPassword(passwordEncoder.encode(newPassword));
+        users.setPassword(passwordEncoder.encode(newPassword));
         // Invalider le token après utilisation
 
-        user.setTokenExpirationDate(null);
+        users.setTokenExpirationDate(null);
 
-        userRepository.save(user);
+        userRepository.save(users);
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tn.sopra.continuix.dtos.UserDTO;
 import tn.sopra.continuix.entities.Role;
-import tn.sopra.continuix.entities.User;
+import tn.sopra.continuix.entities.Users;
 import tn.sopra.continuix.request.ResetPasswordRequest;
 import tn.sopra.continuix.services.UserServiceImpl;
 
@@ -30,7 +30,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+        List<Users> users = userService.getAllUsers();
         List<UserDTO> userDTOs = users.stream()
                 .map(userService::convertToDTO)
                 .collect(Collectors.toList());
@@ -39,10 +39,10 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
+    public ResponseEntity<Users> getUserById(@PathVariable Long id) {
+        Users users = userService.getUserById(id);
+        if (users != null) {
+            return ResponseEntity.ok(users);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -51,32 +51,32 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         // Création d'un nouvel utilisateur
-        User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
-        user.setEmail(userDTO.getEmail());
-        user.setRole(Role.valueOf(String.valueOf(userDTO.getRole())));
+        Users users = new Users();
+        users.setUsername(userDTO.getUsername());
+        users.setPassword(userDTO.getPassword());
+        users.setEmail(userDTO.getEmail());
+        users.setRole(Role.valueOf(String.valueOf(userDTO.getRole())));
 
         if (userDTO.getSupervisor() != null) {
-            User supervisor = userService.findById(userDTO.getSupervisor())
+            Users supervisor = userService.findById(userDTO.getSupervisor())
                     .orElseThrow(() -> new RuntimeException("Superviseur non trouvé avec ID : " + userDTO.getSupervisor()));
-            user.setSupervisor(supervisor);
+            users.setSupervisor(supervisor);
         }
 
-        User createdUser = userService.saveUser(user);
-        UserDTO createdUserDTO = userService.convertToDTO(createdUser);
+        Users createdUsers = userService.saveUser(users);
+        UserDTO createdUserDTO = userService.convertToDTO(createdUsers);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUserDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        User updatedData = new User();
+        Users updatedData = new Users();
         updatedData.setUsername(userDTO.getUsername());
         updatedData.setEmail(userDTO.getEmail());
         updatedData.setRole(Role.valueOf(String.valueOf(userDTO.getRole())));
 
-        User updatedUser = userService.updateUser(id, updatedData);
-        UserDTO updatedUserDTO = userService.convertToDTO(updatedUser);
+        Users updatedUsers = userService.updateUser(id, updatedData);
+        UserDTO updatedUserDTO = userService.convertToDTO(updatedUsers);
         return ResponseEntity.ok(updatedUserDTO);
     }
 
@@ -87,12 +87,12 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
     @PostMapping("/{userId}/assign-supervisor/{supervisorId}")
-    public User assignSupervisor(@PathVariable Long userId, @PathVariable Long supervisorId) {
+    public Users assignSupervisor(@PathVariable Long userId, @PathVariable Long supervisorId) {
         return userService.assignSupervisor(userId, supervisorId);
     }
 
     @GetMapping("/{userId}/subordinates")
-    public List<User> getSubordinates(@PathVariable Long userId) {
+    public List<Users> getSubordinates(@PathVariable Long userId) {
         return userService.getSubordinates(userId);
     }
 

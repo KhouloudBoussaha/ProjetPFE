@@ -1,6 +1,5 @@
 package tn.sopra.continuix.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +23,7 @@ public class NotificationRecipient {
     @JoinColumn(name = "recipient_id")
     @JsonIgnore // ou utilise DTO si tu as besoin d'infos sur le recipient
     @ManyToOne
-    private User recipient;
+    private Users recipient;
     @Column(nullable = false)
     private Boolean accepted = false;
 

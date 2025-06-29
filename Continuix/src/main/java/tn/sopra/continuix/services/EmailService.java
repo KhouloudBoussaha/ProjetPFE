@@ -11,16 +11,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import tn.sopra.continuix.entities.Alerte;
-import tn.sopra.continuix.entities.Notification;
-import tn.sopra.continuix.entities.User;
 import tn.sopra.continuix.repositories.NotificationRepository;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class EmailService {

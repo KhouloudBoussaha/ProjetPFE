@@ -29,7 +29,7 @@ public class Notification implements Serializable {
     private LocalDateTime createdAt;
     @ManyToOne
     @JoinColumn(name = "created_by_id")
-    private User createdBy; // Admin qui a acréé la notification
+    private Users createdBy; // Admin qui a acréé la notification
     @JsonManagedReference
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
     private List<NotificationRecipient> recipients;

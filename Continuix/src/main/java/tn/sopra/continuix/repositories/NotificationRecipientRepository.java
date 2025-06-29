@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import tn.sopra.continuix.entities.NotificationRecipient;
 import tn.sopra.continuix.entities.Notification;
-import tn.sopra.continuix.entities.User;
+import tn.sopra.continuix.entities.Users;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +18,9 @@ public interface NotificationRecipientRepository  extends JpaRepository<Notifica
 
     List<Notification> findByRecipientId(@Param("recipientId") Long recipientId);
 
-    Optional<NotificationRecipient> findByNotificationAndRecipient(Notification notification, User recipient);
+    Optional<NotificationRecipient> findByNotificationAndRecipient(Notification notification, Users recipient);
 
-    List<NotificationRecipient> findByRecipient(User recipient);
+    List<NotificationRecipient> findByRecipient(Users recipient);
     @Modifying // ✅ Nécessaire pour DELETE ou UPDATE
     @Transactional
     @Query("DELETE FROM NotificationRecipient nr WHERE nr.recipient.id = :userId")

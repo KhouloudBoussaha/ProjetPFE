@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import tn.sopra.continuix.entities.User;
+import tn.sopra.continuix.entities.Users;
 import tn.sopra.continuix.repositories.UserRepository;
 
 
@@ -18,9 +18,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Cacheable
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
+        Users users = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
-        System.out.println("Loading user: email=" + user.getEmail() + ", username=" + user.getUsername() + ", role=" + user.getRole());
-        return UserDetailsImpl.build(user);
+        System.out.println("Loading user: email=" + users.getEmail() + ", username=" + users.getUsername() + ", role=" + users.getRole());
+        return UserDetailsImpl.build(users);
     }
 }

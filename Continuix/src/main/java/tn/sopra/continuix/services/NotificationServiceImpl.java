@@ -8,13 +8,11 @@ import org.springframework.web.server.ResponseStatusException;
 import tn.sopra.continuix.dtos.NotificationDTO;
 import tn.sopra.continuix.entities.Notification;
 import tn.sopra.continuix.entities.NotificationRecipient;
-import tn.sopra.continuix.entities.User;
+import tn.sopra.continuix.entities.Users;
 import tn.sopra.continuix.repositories.NotificationRecipientRepository;
 import tn.sopra.continuix.repositories.NotificationRepository;
 import tn.sopra.continuix.repositories.UserRepository;
 import tn.sopra.continuix.request.NotificationRequest;
-import tn.sopra.continuix.services.EmailService;
-import tn.sopra.continuix.services.NotificationService;
 
 
 import java.time.LocalDateTime;
@@ -43,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void createNotificationForAllUsers(NotificationRequest request) {
         Long adminId = 26L;
-        User admin = userRepository.findById(adminId)
+        Users admin = userRepository.findById(adminId)
                 .orElseThrow(() -> new IllegalArgumentException("Admin not found"));
 
         Notification notification = new Notification();
@@ -54,42 +52,42 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setCreatedBy(admin);
         notification = notificationRepository.save(notification);
 
-        List<User> allUsers = userRepository.findAll();
+        List<Users> allUsers = userRepository.findAll();
 
-        for (User user : allUsers) {
-            if (user.getId().equals(admin.getId())) continue;
+        for (Users users : allUsers) {
+            if (users.getId().equals(admin.getId())) continue;
 
             NotificationRecipient recipient = new NotificationRecipient();
             recipient.setNotification(notification);
-            recipient.setRecipient(user);
+            recipient.setRecipient(users);
             recipient.setAccepted(Boolean.FALSE);
             recipient.setAcknowledgedAt(null);
             notificationRecipientRepository.save(recipient);
 
             try {
                 emailService.sendNotificationEmail(
-                        user.getEmail(),
+                        users.getEmail(),
                         notification.getTitle(),
                         notification.getMessage(),
                         admin.getUsername(),
                         notification.getId()
                 );
             } catch (Exception e) {
-                System.err.println("Échec d'envoi de mail à " + user.getEmail() + ": " + e.getMessage());
+                System.err.println("Échec d'envoi de mail à " + users.getEmail() + ": " + e.getMessage());
             }
         }
     }
 
     @Override
     public NotificationDTO viewNotification(Long notificationId, String email) {
-        User user = userRepository.findByEmail(email)
+        Users users = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification not found"));
 
         NotificationRecipient recipient = notificationRecipientRepository
-                .findByNotificationAndRecipient(notification, user)
+                .findByNotificationAndRecipient(notification, users)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification not assigned to user"));
 
         // Ne change rien ici, juste retourner les données
@@ -101,21 +99,21 @@ public class NotificationServiceImpl implements NotificationService {
                 notification.getImpact(),
                 notification.getCreatedAt(),
                 notification.getCreatedBy().getId(),
-                user.getId(),
+                users.getId(),
                 recipient.getAccepted()
         );
     }
 
     @Override
     public void acknowledgeNotification(Long notificationId, String email) {
-        User user = userRepository.findByEmail(email)
+        Users users = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification not found"));
 
         NotificationRecipient recipient = notificationRecipientRepository
-                .findByNotificationAndRecipient(notification, user)
+                .findByNotificationAndRecipient(notification, users)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification not assigned to user"));
 
         if (Boolean.TRUE.equals(recipient.getAccepted())) {

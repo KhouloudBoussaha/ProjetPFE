@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tn.sopra.continuix.config.JwtUtil;
-import tn.sopra.continuix.entities.User;
+import tn.sopra.continuix.entities.Users;
 import tn.sopra.continuix.repositories.UserRepository;
 import tn.sopra.continuix.request.LoginRequest;
 import tn.sopra.continuix.request.ResetPasswordRequest;
@@ -62,21 +62,21 @@ public class AuthController {
         }
 
         // Recherche de l'utilisateur par le token
-        User user = userRepository.findByResetPasswordToken(token);
-        if (user == null) {
+        Users users = userRepository.findByResetPasswordToken(token);
+        if (users == null) {
             return ResponseEntity.badRequest().body("Token invalide");
         }
 
         // Vérification de l'expiration du token
-        if (user.getTokenExpirationDate() != null && user.getTokenExpirationDate().isBefore(LocalDateTime.now())) {
+        if (users.getTokenExpirationDate() != null && users.getTokenExpirationDate().isBefore(LocalDateTime.now())) {
             return ResponseEntity.badRequest().body("Token expiré");
         }
 
         // Mise à jour du mot de passe
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        user.setResetPasswordToken(null);
-        user.setTokenExpirationDate(null);
-        userRepository.save(user);
+        users.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        users.setResetPasswordToken(null);
+        users.setTokenExpirationDate(null);
+        userRepository.save(users);
 
         return ResponseEntity.ok("Mot de passe mis à jour avec succès");
     }
