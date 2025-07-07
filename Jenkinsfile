@@ -16,7 +16,9 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean install'
+                dir('ContinuixV1') {  // Change ça si ton dossier a un autre nom
+                    bat 'mvn clean install'
+                }
             }
         }
     }
