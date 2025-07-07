@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Testing Maven') {
             steps {
-                bat 'mvn -version'
+                sh 'mvn -version'
             }
         }
 
@@ -16,8 +16,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('ContinuixV1') {  // Change ça si ton dossier a un autre nom
-                    bat 'mvn clean install'
+                dir('ContinuixV1') {  // Adapte ce chemin si ton projet a un autre nom
+                    sh 'mvn clean install'
                 }
             }
         }
