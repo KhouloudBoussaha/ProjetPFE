@@ -1,0 +1,25 @@
+.main-content {
+  /* Ce margin est déjà géré par #kt_app_main */
+  margin-left: 0;
+}
+.alert-title {
+  color: red;
+  font-size: 2rem;       /* plus gros */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem; /* un petit espace en dessous */
+}
+.content-inner {
+  max-width: 100%;
+  overflow: visible;
+  height: auto;
+}
+.table-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+;
+  /* Augmentez le z-index pour le placer au-dessus de l'image */
+  color: black !important;
+}

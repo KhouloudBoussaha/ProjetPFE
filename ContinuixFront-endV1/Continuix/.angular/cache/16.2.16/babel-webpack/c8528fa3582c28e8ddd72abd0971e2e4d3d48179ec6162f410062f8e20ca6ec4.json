@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var Impact;\n(function (Impact) {\n  Impact[Impact[\"LOW\"] = 0] = \"LOW\";\n  Impact[Impact[\"MEDIUM\"] = 1] = \"MEDIUM\";\n  Impact[Impact[\"HIGH\"] = 2] = \"HIGH\";\n})(Impact || (Impact = {}));","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

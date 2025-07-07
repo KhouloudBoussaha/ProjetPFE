@@ -1,0 +1,9 @@
+<div class="app-root d-flex" id="kt_app_root">
+  <!-- SIDEBAR -->
+  <app-sidebar *ngIf="showSidebar"></app-sidebar>
+
+  <!-- CONTENU PRINCIPAL -->
+  <div class="app-main-content" id="kt_app_main">
+    <router-outlet></router-outlet>
+  </div>
+</div>

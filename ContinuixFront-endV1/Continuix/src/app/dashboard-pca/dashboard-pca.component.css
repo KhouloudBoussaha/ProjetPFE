@@ -1,0 +1,37 @@
+.fade-in {
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.hover-effect {
+  @apply transition-transform duration-300 transform hover:-translate-y-2 hover:shadow-xl hover:bg-opacity-90;
+}
+
+/* Déjà défini, mais plus pro */
+.dashboard-card button {
+  background-color: #ff6600;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-card button:hover {
+  background-color: #e65c00;
+}
+.fade-in {
+  animation: fadeIn 0.7s ease-in;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.btn-orange {
+  @apply bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-200 flex items-center gap-2;
+}

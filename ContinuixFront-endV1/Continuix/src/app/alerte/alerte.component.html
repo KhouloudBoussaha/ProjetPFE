@@ -1,0 +1,144 @@
+<div class="table-container">
+  <!-- Create Alerte Form -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title alert-title">Set Up a New Alert</h5>
+      <p class="alert-description">
+        Submit any detected anomalies here to promptly alert the administrator for swift action.
+      </p>
+      <form [formGroup]="alerteForm" (ngSubmit)="createAlerte()">
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            id="description"
+            formControlName="description"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="type" class="form-label">Type</label>
+          <select class="form-select" id="type" formControlName="type" required>
+            <option value="">-- Select Type --</option>
+            <option *ngFor="let type of incidentTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="impact" class="form-label">Impact</label>
+          <select class="form-select" id="impact" formControlName="impact" required>
+            <option value="">-- Select Impact --</option>
+            <option *ngFor="let impact of impacts" [value]="impact">{{ impact }}</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="alerteForm.invalid">Create</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Alerte List -->
+  <!-- Alerte List -->
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Alerts Dashboard</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th>Type</th>
+          <th>Impact</th>
+          <th>Resolved</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let alerte of alertes">
+          <td>{{ alerte.id }}</td>
+          <td>{{ alerte.description }}</td>
+          <td>{{ alerte.type }}</td>
+          <td>
+            <span class="badge rounded-pill" [ngClass]="getImpactBadgeClass(alerte.impact)">
+              {{ alerte.impact }}
+            </span>
+          </td>
+          <td>{{ alerte.resolved ? 'Yes' : 'No' }}</td>
+          <td>
+            <button
+              class="btn btn-sm btn-warning me-2"
+              (click)="editAlerte(alerte)"
+              [disabled]="alerte.resolved"
+            >
+              Modifier
+            </button>
+            <button
+              class="btn btn-sm btn-danger me-2"
+              (click)="deleteAlerte(alerte.id!)"
+              [disabled]="alerte.resolved"
+            >
+              Supprimer
+            </button>
+            <button
+              class="btn btn-sm btn-success"
+              (click)="resolveAlerte(alerte.id!)"
+              [disabled]="alerte.resolved"
+            >
+              Résoudre
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+  <!-- Edit Alerte Modal -->
+  <div class="modal fade" id="editAlerteModal" tabindex="-1" #editModal>
+    <div class="modal-dialog">
+      <div class="modal-content" *ngIf="editingAlerte">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier Alerte</h5>
+          <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="editForm">
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="description"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Type</label>
+              <select class="form-select" formControlName="type" required>
+                <option value="">-- Select Type --</option>
+                <option *ngFor="let type of incidentTypes" [value]="type">{{ type }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Impact</label>
+              <select class="form-select" formControlName="impact" required>
+                <option value="">-- Select Impact --</option>
+                <option *ngFor="let impact of impacts" [value]="impact">{{ impact }}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateAlerte()"
+            [disabled]="editForm.invalid"
+          >
+            Enregistrer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

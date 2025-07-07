@@ -1,0 +1,31 @@
+.organigramme-layout {
+  background-color: #f9f9f9; /* fond clair */
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 100%; /* largeur complète de son conteneur parent */
+  max-width: 900px; /* limiter la largeur */
+  margin: 20px auto; /* centrer horizontalement */
+  color: black;
+  overflow: visible; /* pas de scroll interne */
+  position: relative; /* position normale */
+  height: auto; /* s’adapte au contenu */
+}
+
+.node {
+  background-color: #fca5a5; /* rouge clair */
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  min-width: 140px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.levels-column {
+  position: relative; /* Si tu veux garder les niveaux affichés */
+  color: #333;
+  font-weight: 600;
+  margin-left: 10px;
+}

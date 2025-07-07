@@ -1,0 +1,85 @@
+<div class="app-main-content">
+
+  <!-- ✅ Affichage du tableau (si le formulaire est masqué) -->
+  <div *ngIf="!showForm" class="user-table-container">
+    <div class="header-bar">
+      <h2>User <strong>Management</strong></h2>
+      <div class="actions">
+        <button class="btn export-btn">📄 Export to Excel</button>
+        <button class="btn add-btn" (click)="showForm = true">➕ Add New User</button>
+      </div>
+    </div>
+
+    <!-- Tableau d’utilisateurs -->
+    <div class="table-scroll-wrapper">
+      <table class="custom-user-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Supervisor</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of user; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td class="user-info">
+              <div class="user-details">
+                <div class="user-avatar">{{ u.username.charAt(0) }}</div>
+                <span class="username">{{ u.username }}</span>
+              </div>
+            </td>
+            <td>{{ u.email }}</td>
+            <td>{{ getRoleName(u.role) }}</td>
+            <td>{{ u.supervisor }}</td>
+            <td>
+              <button class="icon-btn edit" (click)="editUser(u)">⚙️</button>
+              <button class="icon-btn delete" (click)="deleteUser(u.id)">❌</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ✅ Affichage du formulaire (si demandé) -->
+  <div *ngIf="showForm" class="user-form">
+    <h3>Add New User</h3>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" formControlName="username" placeholder="username" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+       <input type="email" formControlName="email" placeholder="example@domain.com" />
+  <div class="text-danger" *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors">
+    <div *ngIf="userForm.get('email')?.errors?.['required']">Email is required.</div>
+    <div *ngIf="userForm.get('email')?.errors?.['email']">Invalid email format.</div>
+    <div *ngIf="userForm.get('email')?.errors?.['emailExists']">This email is already in use.</div>
+  </div>
+      </div>
+      <div class="form-group">
+        <label>Supervisor ID</label>
+        <input type="text" formControlName="supervisor" placeholder="supervisor" />
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <div class="role-options">
+          <label class="radio" *ngFor="let r of roles">
+            <input type="radio" formControlName="role" [value]="r.id" />
+            {{ r.name }}
+          </label>
+        </div>
+      </div>
+      <div class="form-buttons">
+        <button type="button" (click)="showForm = false; onReset()" class="btn btn-cancel">Cancel</button>
+        <button type="submit" class="btn btn-save" [disabled]="userForm.invalid">Save</button>
+      </div>
+    </form>
+  </div>
+
+</div>

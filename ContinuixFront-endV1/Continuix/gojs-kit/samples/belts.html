@@ -1,0 +1,548 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
+
+<meta name="description" content="Belts &amp; gears: chains, pulleys, tensioners, conveyor belts, rollers." />
+<meta itemprop="description" content="Belts &amp; gears: chains, pulleys, tensioners, conveyor belts, rollers." />
+<meta property="og:description" content="Belts &amp; gears: chains, pulleys, tensioners, conveyor belts, rollers." />
+<meta name="twitter:description" content="Belts &amp; gears: chains, pulleys, tensioners, conveyor belts, rollers." />
+
+
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="../assets/css/style.css">
+<!-- Copyright 1998-2025 by Northwoods Software Corporation. -->
+
+
+<meta itemprop="name" content="Belts and Rollers Diagram Showing Continuous Belts Winding Around Circular Rollers" />
+<meta property="og:title" content="Belts and Rollers Diagram Showing Continuous Belts Winding Around Circular Rollers" />
+<meta name="twitter:title" content="Belts and Rollers Diagram Showing Continuous Belts Winding Around Circular Rollers" />
+
+
+<meta property="og:image" content="https://gojs.net/latest/assets/images/screenshots/belts.png" />
+<meta itemprop="image" content="https://gojs.net/latest/assets/images/screenshots/belts.png" />
+<meta name="twitter:image" content="https://gojs.net/latest/assets/images/screenshots/belts.png" />
+
+<meta property="og:url" content="https://gojs.net/latest/samples/belts.html" />
+<meta property="twitter:url" content="https://gojs.net/latest/samples/belts.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:type" content="website" />
+<meta property="twitter:domain" content="gojs.net" />
+
+    <title>
+      Belts and Rollers Diagram Showing Continuous Belts Winding Around Circular Rollers | GoJS Diagramming Library
+    </title>
+  </head>
+
+  <body>
+    <!-- This top nav is not part of the sample code -->
+    <nav id="navTop" class=" w-full h-[var(--topnav-h)] z-30 bg-white border-b border-b-gray-200">
+  <div class="max-w-screen-xl mx-auto flex flex-wrap items-start justify-between px-4">
+    <a class="text-white bg-nwoods-primary font-bold !leading-[calc(var(--topnav-h)_-_1px)] my-0 px-2 text-4xl lg:text-5xl logo"
+       href="../">
+      GoJS
+    </a>
+    <div class="relative">
+      <button id="topnavButton" class="h-[calc(var(--topnav-h)_-_1px)] px-2 m-0 text-gray-900 bg-inherit shadow-none md:hidden hover:!bg-inherit hover:!text-nwoods-accent hover:!shadow-none" aria-label="Navigation">
+        <svg class="h-7 w-7 block" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div id="topnavList" class="hidden md:block">
+        <div class="absolute right-0 z-30 flex flex-col items-end rounded border border-gray-200 p-4 pl-12 shadow bg-white text-gray-900 font-semibold
+                    md:flex-row md:space-x-4 md:items-start md:border-0 md:p-0 md:shadow-none md:bg-inherit">
+          <a href="../learn/">Learn</a>
+          <a href="../samples/">Samples</a>
+          <a href="../intro/">Intro</a>
+          <a href="../api/">API</a>
+          <a href="../download.html">Download</a>
+          <a href="https://forum.nwoods.com/c/gojs/11" target="_blank" rel="noopener">Forum</a>
+          <a id="tc" href="https://nwoods.com/contact.html"
+            target="_blank" rel="noopener" onclick="getOutboundLink('https://nwoods.com/contact.html', 'contact');">Contact</a>
+          <a id="tb" href="https://nwoods.com/sales/index.html"
+            target="_blank" rel="noopener" onclick="getOutboundLink('https://nwoods.com/sales/index.html', 'buy');">Buy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    // topnav
+    var topButton = document.getElementById("topnavButton");
+    var topnavList = document.getElementById("topnavList");
+    if (topButton && topnavList) {
+      topButton.addEventListener("click", function (e) {
+        topnavList
+          .classList
+          .toggle("hidden");
+        e.stopPropagation();
+      });
+      document.addEventListener("click", function (e) {
+        // if the clicked element isn't the list, close the list
+        if (!topnavList.classList.contains("hidden") && !e.target.closest("#topnavList")) {
+          topButton.click();
+        }
+      });
+
+      // set active <a> element
+      var url = window
+        .location
+        .href
+        .toLowerCase();
+      var aTags = topnavList.getElementsByTagName('a');
+      for (var i = 0; i < aTags.length; i++) {
+        var lowerhref = aTags[i]
+          .href
+          .toLowerCase();
+        if (url.startsWith(lowerhref)) {
+          aTags[i]
+            .classList
+            .add('active');
+          break;
+        }
+      }
+    }
+  });
+</script>
+    <div class="flex flex-col prose">
+      <div class="w-full max-w-screen-xl mx-auto">
+        <!-- * * * * * * * * * * * * * -->
+        <!-- Start of GoJS sample code -->
+        <script src="https://cdn.jsdelivr.net/npm/gojs@3.0.22"></script>
+
+        
+
+        <div id="allSampleContent" class="p-4 w-full">
+          
+            
+            
+
+<script id="code">
+  function init() {
+    myDiagram = new go.Diagram('myDiagramDiv', {
+      InitialLayoutCompleted: (e) => {
+        updateBelts(); // changes the bounds of the "Belt"s
+        e.diagram.alignDocument(go.Spot.Center, go.Spot.Center);
+      },
+      'animationManager.isInitial': false,
+      'undoManager.isEnabled': true,
+      allowCopy: false,
+      allowDelete: false,
+      'draggingTool.moveParts': function (parts, offset, check) {
+        // method override must be function, not =>
+        go.DraggingTool.prototype.moveParts.call(this, parts, offset, check);
+        updateBelts(); // this is inefficient if there are a lot of belts
+      }
+    });
+
+    function commonStyle() {
+      return {
+        locationSpot: go.Spot.Center,
+        locationObjectName: 'GUIDE',
+        selectionAdorned: false,
+        dragComputation: (node, newloc, snaploc) => {
+          // don't allow rollers or drums to overlap each other
+          var oldloc = node.location;
+          var noderad = node.findObject('GUIDE').actualBounds.width / 2;
+          var ok = true;
+          var it = node.diagram.nodes.iterator;
+          while (it.next()) {
+            var n = it.value;
+            if (n === node || n.category === 'Belt') continue;
+            var dist2 = newloc.distanceSquaredPoint(n.location);
+            var rad = n.findObject('GUIDE').actualBounds.width / 2;
+            if (dist2 < (noderad + rad) * (noderad + rad)) {
+              ok = false;
+              break;
+            }
+          }
+          return ok ? newloc : oldloc;
+        }
+      };
+    }
+
+    function applyCommonStyleBindings(object) {
+      object.bindTwoWay('location', 'xy', go.Point.parse, go.Point.stringify);
+      return object;
+    }
+
+    myDiagram.nodeTemplateMap.add(
+      'Roller',
+      applyCommonStyleBindings(
+        new go.Node('Spot', commonStyle())
+          .add(
+            new go.Shape('Circle', {
+              name: 'GUIDE',
+              fill: 'lightgray',
+              strokeWidth: 0,
+              width: 20,
+              height: 20
+            })
+              .bindTwoWay('width', 'diameter')
+              .bind('height', 'diameter'),
+            new go.TextBlock({ font: '6pt sans-serif', stroke: 'black' }).bind('text', 'key')
+          )
+      )
+    );
+
+    myDiagram.nodeTemplateMap.add(
+      'Drum',
+      applyCommonStyleBindings(
+        new go.Node('Spot', commonStyle())
+          .add(
+            new go.Shape('Circle', {
+              name: 'GUIDE',
+              fill: 'lightgray',
+              stroke: 'gray',
+              width: 80,
+              height: 80
+            }).bind('fill', 'color'),
+            new go.TextBlock({
+              font: '6pt sans-serif',
+              stroke: 'darkblue'
+            }).bind('text', 'key')
+          )
+      )
+    );
+
+    myDiagram.nodeTemplateMap.add(
+      'Belt',
+      new go.Node({
+        selectionAdorned: false,
+        layerName: 'Foreground',
+        copyable: false,
+        movable: false
+      })
+        .add(
+          new go.Shape({
+            name: 'BELT',
+            fill: null,
+            stroke: 'gray',
+            strokeWidth: 2,
+            strokeDashArray: [4, 2]
+          }).bind('stroke', 'color')
+        )
+    );
+
+    load();
+  } // end init
+
+  function updateBelts(coll) {
+    if (!coll) coll = myDiagram.nodes;
+    myDiagram.startTransaction();
+    coll.each(updateBelt);
+    myDiagram.commitTransaction('updated belts');
+  }
+
+  function updateBelt(node) {
+    if (node.category !== 'Belt') return;
+    var belt = node.findObject('BELT');
+    var diagram = node.diagram;
+    var guideinfos = node.data.guides;
+    if (!Array.isArray(guideinfos))
+      throw new Error('data.guides is not an Array for Belt node: ' + node.data.key);
+
+    // gather basic information about each guide node
+    var guides = []; // holds Objects with handy information
+    for (var i = 0; i < guideinfos.length; i++) {
+      var info = guideinfos[i];
+      var guidenode = diagram.findNodeForKey(info.k);
+      if (guidenode !== null && guidenode.location.isReal()) {
+        var loc = guidenode.location;
+        var cyl = guidenode.findObject('GUIDE');
+        var radius = cyl !== null ? cyl.measuredBounds.width / 2 : 10;
+        if (guides.length > 0) {
+          var prevguide = guides[guides.length - 1];
+          var prevloc = prevguide.location;
+          var prevradius = prevguide.radius;
+          var dist = Math.sqrt(prevloc.distanceSquaredPoint(loc));
+          if (dist < Math.abs(prevradius - radius)) {
+            // one is completely inside the other
+            if (prevradius > radius) {
+              continue; // skip this smaller guide
+            } else {
+              guides.pop(); // skip the previous guide, which was smaller
+            }
+          }
+        }
+        guides.push({
+          node: guidenode,
+          location: guidenode.location.copy(),
+          radius: radius + belt.strokeWidth / 2,
+          outside: !!info.outside,
+          from: null, // these Points will be computed by computeContacts
+          to: null
+        });
+      }
+    }
+
+    // handle some degenerate cases
+    if (guides.length < 2) {
+      if (guides.length === 1) {
+        node.location = guides[0].location;
+      }
+      if (belt !== null) {
+        belt.geometry = new go.Geometry(go.GeometryType.Ellipse);
+      }
+      return;
+    }
+
+    // compute the contact points
+    // assume guides are listed in clockwise order
+    for (var i = 0; i < guides.length; i++) {
+      var guide = guides[i];
+      var next = guides[(i + 1) % guides.length];
+      computeContacts(guide, next);
+    }
+
+    // skip any guides that should not contact the Belt, because they're cannot touch the path
+    var i = 0;
+    while (guides.length > 2 && i < guides.length) {
+      var guide = guides[i];
+      var next = guides[(i + 1) % guides.length];
+      var follow = guides[(i + 2) % guides.length];
+      // is NEXT on the wrong side of the line from GUIDE to FOLLOW?
+      var wrongside = next.to.compareWithLineSegmentPoint(guide.from, follow.to) < 0;
+      if (next.outside) wrongside = !wrongside;
+      if (wrongside) {
+        computeContacts(guide, follow);
+        // get rid of NEXT
+        if (i + 1 < guides.length) {
+          guides.splice(i + 1, 1);
+        } else {
+          guides.splice(0, 1);
+        }
+        // now also need to check whether GUIDE has become on the wrong side!
+        if (i > 0) i--;
+      } else {
+        i++;
+      }
+    }
+
+    // construct the Geometry for the belt Shape
+    var geo = new go.Geometry();
+    var fig = null;
+    for (var i = 0; i < guides.length; i++) {
+      var guide = guides[i];
+      var next = guides[(i + 1) % guides.length];
+      if (fig === null) {
+        fig = new go.PathFigure(guide.from.x, guide.from.y, true);
+        geo.add(fig);
+      }
+      fig.add(new go.PathSegment(go.SegmentType.Line, next.to.x, next.to.y));
+      var startang = next.location.directionPoint(next.to);
+      var endang = next.location.directionPoint(next.from);
+      var sweep = endang > startang ? endang - startang : 360 - startang + endang;
+      if (next.outside) {
+        // go counter-clockwise
+        fig.add(
+          new go.PathSegment(
+            go.SegmentType.Arc,
+            startang,
+            sweep - 360,
+            next.location.x,
+            next.location.y,
+            next.radius,
+            next.radius
+          )
+        );
+      } else {
+        // positive sweep angle
+        fig.add(
+          new go.PathSegment(
+            go.SegmentType.Arc,
+            startang,
+            sweep,
+            next.location.x,
+            next.location.y,
+            next.radius,
+            next.radius
+          )
+        );
+      }
+    }
+
+    // update the Belt's Shape.geometry
+    if (belt !== null) {
+      var pos = geo.normalize();
+      belt.geometry = geo;
+      // account for the thickness of the belt shape's stroke
+      node.position = new go.Point(-pos.x - belt.strokeWidth / 2, -pos.y - belt.strokeWidth / 2);
+      node.ensureBounds();
+    }
+  } // end updateBelt
+
+  function computeContacts(guideA, guideB) {
+    var locA = guideA.location;
+    var x1 = locA.x;
+    var y1 = locA.y;
+    var r1 = guideA.radius;
+    var locB = guideB.location;
+    var x2 = locB.x;
+    var y2 = locB.y;
+    var r2 = guideB.radius;
+
+    // this assumes that belts only go clockwise
+    var g = Math.atan2(y2 - y1, x2 - x1);
+    var d = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+
+    var bb = (guideA.outside === guideB.outside ? r2 - r1 : r2 + r1) / d;
+    if (bb < -1) bb = -1;
+    else if (bb > 1) bb = 1;
+    var b = Math.asin(bb);
+
+    if (guideB.outside) {
+      if (guideA.outside) {
+        // both outside
+        var a = Math.PI / 2 - b - g;
+        var cosa = Math.cos(a);
+        var sina = Math.sin(a);
+        guideA.from = new go.Point(x1 - r1 * cosa, y1 + r1 * sina);
+        guideB.to = new go.Point(x2 - r2 * cosa, y2 + r2 * sina);
+      } else {
+        // inside A, outside B
+        var a = Math.PI / 2 - Math.abs(b) - g;
+        var cosa = Math.cos(a);
+        var sina = Math.sin(a);
+        guideA.from = new go.Point(x1 + r1 * cosa, y1 - r1 * sina);
+        guideB.to = new go.Point(x2 - r2 * cosa, y2 + r2 * sina);
+      }
+    } else {
+      if (guideA.outside) {
+        // outside A, inside B
+        var a = Math.abs(b) - Math.PI / 2 - g;
+        var cosa = Math.cos(a);
+        var sina = Math.sin(a);
+        guideA.from = new go.Point(x1 + r1 * cosa, y1 - r1 * sina);
+        guideB.to = new go.Point(x2 - r2 * cosa, y2 + r2 * sina);
+      } else {
+        // both inside
+        var a = Math.PI / 2 + b - g;
+        var cosa = Math.cos(a);
+        var sina = Math.sin(a);
+        guideA.from = new go.Point(x1 + r1 * cosa, y1 - r1 * sina);
+        guideB.to = new go.Point(x2 + r2 * cosa, y2 - r2 * sina);
+      }
+    }
+  }
+
+  // Show the diagram's model in JSON format that the user may edit
+  function save() {
+    document.getElementById('mySavedModel').value = myDiagram.model.toJson();
+    myDiagram.isModified = false;
+  }
+
+  var beltAnimation = null;
+  function load() {
+    myDiagram.model = go.Model.fromJson(document.getElementById('mySavedModel').value);
+
+    // Animate the flow in the pipes
+    if (beltAnimation) beltAnimation.stop();
+    var animation = new go.Animation();
+    animation.easing = go.Animation.EaseLinear;
+    myDiagram.nodes.each((node) => {
+      if (node.category !== 'Belt') return;
+      animation.add(node.findObject('BELT'), 'strokeDashOffset', 36, 0);
+    });
+    // Run indefinitely
+    animation.runCount = Infinity;
+    animation.start();
+    beltAnimation = animation;
+  }
+  window.addEventListener('DOMContentLoaded', init);
+</script>
+
+<div id="sample">
+  <div id="myDiagramDiv" style="border: solid 1px black; width: 100%; height: 600px"></div>
+  <p>
+    This sample uses <a>Animation</a>s and <a>Node</a>s to give the illusion of
+    a continuous belt. The belt is guided by rollers which it bends around using
+    custom <a>Geometry</a>. It is assumed that the <a>Node</a>s will be arranged in order
+    going clockwise. When the <a>Node</a>s are moved around outside this expected order
+    the belt can behave strangely.
+  </p>
+  <button id="SaveButton" onclick="save()">Save</button>
+  <button onclick="load()">Load</button>
+  Diagram Model saved in JSON format:
+  <textarea id="mySavedModel" style="width: 100%; height: 300px">
+{ "class": "go.GraphLinksModel",
+  "nodeDataArray": [
+{"key":"P111", "category":"Roller", "xy":"450 610"},
+{"key":"P112", "category":"Roller", "xy":"400 660"},
+{"key":"P113", "category":"Roller", "xy":"350 725"},
+{"key":"P114", "category":"Roller", "xy":"305 800"},
+{"key":"P115", "category":"Roller", "xy":"280 705"},
+{"key":"P116", "category":"Roller", "xy":"200 720"},
+{"key":"P117", "category":"Roller", "xy":"200 620"},
+{"key":"D1", "category":"Drum", "xy":"300 540"},
+{"key":"D2", "category":"Drum", "xy":"300 622"},
+{"key":"B1", "category":"Belt", "color":"blue",
+ "guides":[ {"k":"D2"},{"k":"P111"},{"k":"P112", "outside":true},{"k":"P113", "outside":true},{"k":"P114"},{"k":"P115", "outside":true},{"k":"P116"},{"k":"P117"} ]},
+{"key":"P211", "category":"Roller", "xy":"100 750"},
+{"key":"P212", "category":"Roller", "xy":"150 800"},
+{"key":"B2", "category":"Belt", "color":"green",
+  "guides":[ {"k":"P211"},{"k":"P116"},{"k":"P212"} ]}
+ ],
+  "linkDataArray": []}
+  </textarea>
+</div>
+
+          
+        </div>
+        <!-- * * * * * * * * * * * * * -->
+        <!--  End of GoJS sample code  -->
+      </div>
+
+      <div id="allTagDescriptions" class="p-4 w-full max-w-screen-xl mx-auto">
+        <hr/>
+        <h3 class="text-xl">GoJS Features in this sample</h3>
+        <!-- blacklist tags that do not correspond to a specific GoJS feature -->
+          
+            <h4>Animation</h4>
+<p>
+  <b>GoJS</b> offers several built-in animations, enabled by default, as well as the ability to create arbitrary animations.
+</p>
+<p>
+  The <a href="../api/symbols/Diagram.html#animationManager" target="api">Diagram.animationManager</a> handles animations within a <a href="../api/symbols/Diagram.html" target="api">Diagram</a>.
+  The <a href="../api/symbols/AnimationManager.html" target="api">AnimationManager</a> automatically sets up and dispatches default animations, and has properties to customize and disable them.
+  Custom animations are possible by creating instances of <a href="../api/symbols/Animation.html" target="api">Animation</a> or <a href="../api/symbols/AnimationTrigger.html" target="api">AnimationTrigger</a>.
+  More information can be found in the <a href="../intro/animation.html">GoJS Intro</a>.
+</p>
+            <p>
+              <a href="../samples/index.html#animation">Related samples</a>
+            </p>
+            <hr>
+          
+        <!-- blacklist tags that do not correspond to a specific GoJS feature -->
+          
+            <h4>Geometry Path Strings</h4>
+<p>
+The <b>GoJS</b> <a href="../api/symbols/Geometry.html" target="api">Geometry</a> class controls the "shape" of a <a href="../api/symbols/Shape.html" target="api">Shape</a>,
+whereas the <a href="../api/symbols/Shape.html#fill" target="api">Shape.fill</a> and <a href="../api/symbols/Shape.html#stroke" target="api">Shape.stroke</a> and other shape properties control the colors and appearance of the shape.
+For common shape figures, there are predefined geometries that can be used by setting <a href="../api/symbols/Shape.html#figure" target="api">Shape.figure</a>.
+However one can also define custom geometries.
+</p>
+<p>
+One can construct any Geometry by allocating and initializing a <a href="../api/symbols/Geometry.html" target="api">Geometry</a> of at least one <a href="../api/symbols/PathFigure.html" target="api">PathFigure</a> holding some <a href="../api/symbols/PathSegment.html" target="api">PathSegment</a>s.
+But you may find that using the string representation of a Geometry is easier to write and save in a database.
+Use the static method <a href="../api/symbols/Geometry.html#parse" target="api">Geometry.parse</a> or the <a href="../api/symbols/Shape.html#geometryString" target="api">Shape.geometryString</a> property to transform a geometry path string into a <a href="../api/symbols/Geometry.html" target="api">Geometry</a> object.
+</p>
+<p>
+More information can be found in the <a href="../intro/geometry.html">GoJS Intro</a>.
+</p>
+            <p>
+              <a href="../samples/index.html#geometries">Related samples</a>
+            </p>
+            <hr>
+          
+        </div>
+    </div>
+  </body>
+  <!--  This script is part of the gojs.net website, and is not needed to run the sample -->
+  <script src="../assets/js/goSamples.js"></script>
+</html>

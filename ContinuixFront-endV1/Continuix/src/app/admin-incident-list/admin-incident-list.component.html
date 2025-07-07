@@ -1,0 +1,28 @@
+<div class="container mt-5">
+  <h2 class="mb-4 text-primary">🎉 Incidents déclarés</h2>
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-4" *ngFor="let alerte of alertes">
+      <div class="alert-card shadow-sm p-4 rounded-3 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fw-bold text-dark">{{ alerte.type }}</span>
+          <span class="badge rounded-pill" [ngClass]="getImpactBadgeClass(alerte.impact)">
+            {{ alerte.impact }}
+          </span>
+        </div>
+        <p class="text-muted fst-italic">{{ alerte.description }}</p>
+        <div class="text-end mt-3">
+          <small class="text-secondary">👤 {{ alerte.createdBy?.username || 'Utilisateur inconnu' }}</small>
+        </div>
+         <span [ngClass]="getResolvedBadgeClass(alerte.resolved)">
+          {{ alerte.resolved ? 'Résolu' : 'Non résolu' }}
+        </span>
+        <button 
+          *ngIf="!alerte.resolved"
+          class="btn btn-sm btn-primary ms-2"
+          (click)="markAsResolved(alerte)">
+          Marquer comme résolu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

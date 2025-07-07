@@ -1,0 +1,112 @@
+<div class="group-management-container">
+
+  <!-- Création d'un groupe -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title text-danger text-center" style="font-weight: bold; font-size: 1.5rem;">
+        Create a New Group
+      </h5>
+      <p class="alert-description">
+        Organize your users into manageable groups for streamlined collaboration.
+      </p>
+      <form (ngSubmit)="createGroup()">
+        <div class="mb-3">
+          <label for="groupName" class="form-label">Group Name</label>
+          <input
+            type="text"
+            id="groupName"
+            class="form-control"
+            [(ngModel)]="newGroupName"
+            name="groupName"
+            required
+            placeholder="Enter group name"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Create Group</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des groupes -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Groups List</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Members</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let group of groups">
+            <td>{{ group.name }}</td>
+            <td>{{ group.members.length }}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-info me-2" (click)="selectGroup(group)">👁️ View</button>
+              <button class="btn btn-sm btn-warning me-2" (click)="editGroup(group)">✏️ Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteGroup(group.id)">🗑️ Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Détails du groupe sélectionné -->
+  <div class="card mt-4" *ngIf="selectedGroup && selectedGroup.id">
+    <div class="card-body">
+      <h5 class="card-title text-primary mb-4">Group: {{ selectedGroup.name }}</h5>
+ 
+      <!-- Ajouter un utilisateur -->
+      <div class="mb-3">
+        <label for="addUserSelect" class="form-label">Add a User</label>
+        <div class="input-group">
+          <select
+            id="addUserSelect"
+            class="form-select"
+            [(ngModel)]="selectedUserId"
+            name="userIdToAdd"
+          >
+            <option [ngValue]="null">-- Select a User --</option>
+            <option *ngFor="let user of users" [ngValue]="user.id">
+              {{ user.username }} ({{ user.role }})
+            </option>
+          </select>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="addUserToGroup()"
+            [disabled]="!selectedUserId"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+
+      <!-- Liste des membres -->
+      <h6>Members</h6>
+      <ul class="list-group mb-3">
+        <li
+          *ngFor="let member of selectedGroup.members"
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ member.username }} ({{ member.role }})
+          <button
+            class="btn btn-sm btn-outline-danger"
+            type="button"
+            (click)="removeUserFromGroup(member.id)"
+          >
+            ❌ Remove
+          </button>
+        </li>
+      </ul>
+
+      <!-- Actions -->
+      <button class="btn btn-primary me-2" (click)="saveGroupChanges()">💾 Save Changes</button>
+      <button class="btn btn-secondary" (click)="deselectGroup()">🔙 Back</button>
+    </div>
+  </div>
+
+</div>

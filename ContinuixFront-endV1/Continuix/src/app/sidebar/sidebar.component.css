@@ -1,0 +1,165 @@
+.app-sidebar {
+  width: 300px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #f8f9fa;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  border-right: 1px solid #ddd;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.app-sidebar-menu {
+  padding: 1rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Importation de la police Fiducia Sans (ajuste le chemin selon ton projet) */
+@font-face {
+  font-family: 'Fiducia Sans';
+  src: url('/assets/fonts/fiducia-sans.woff2') format('woff2'),
+       url('/assets/fonts/fiducia-sans.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+
+.title-section h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  color: #111827;
+}
+
+.title-section p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-main-content {
+  display: flex;
+  height: 100vh;
+  position: relative;
+}
+.main-content {
+  margin-left: 300px;      /* largeur de la sidebar */
+  margin-top: 0;           /* retirer l'espace inutile en haut */
+  height: 100vh;           /* toute la hauteur de l'écran */
+  background-color: #fff;
+  width: calc(100% - 300px);
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Styles pour les éléments actifs (inchangés) */
+.menu-link.active {
+  background-color: #ff6600; /* orange vif */
+   font-family: 'Fiducia Sans', Arial, sans-serif;
+  color: white !important;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 8px;
+  padding: 10px 16px; /* espace interne confortable */
+  box-shadow: 0 2px 6px rgba(255, 102, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px; /* pour icône + texte */
+  transition: background-color 0.3s ease;
+  
+}
+
+/* Au survol (hover) quand actif */
+.menu-link.active:hover {
+  background-color: #e65500;
+  box-shadow: 0 4px 10px rgba(230, 85, 0, 0.7);
+  cursor: pointer;
+}
+
+/* Pour les icônes dans le menu, si actif */
+.menu-link.active i {
+  color: white;
+}
+
+/* Styles spécifiques par section */
+
+/* Notification Management (Bleu) */
+.menu-notification .menu-link {
+  background-color: #e7f1ff; /* Bleu clair pour le fond non actif */
+  color: #007bff; /* Texte bleu */
+}
+.menu-notification .menu-link:hover:not(.active) {
+  background-color: #cce4ff; /* Bleu légèrement plus foncé au survol */
+}
+.menu-notification .menu-link i {
+  color: #007bff; /* Icône bleu */
+}
+
+/* User Management (Vert) */
+.menu-user .menu-link {
+  background-color: #e6f4ea; /* Vert clair pour le fond non actif */
+  color: #28a745; /* Texte vert */
+}
+.menu-user .menu-link:hover:not(.active) {
+  background-color: #d1e7dd; /* Vert légèrement plus foncé au survol */
+}
+.menu-user .menu-link i {
+  color: #28a745; /* Icône verte */
+}
+
+/* PCA Management (Violet) */
+.menu-pca .menu-link {
+  background-color: #f3e8ff; /* Violet clair pour le fond non actif */
+  color: #6f42c1; /* Texte violet */
+}
+.menu-pca .menu-link:hover:not(.active) {
+  background-color: #e2d6f5; /* Violet légèrement plus foncé au survol */
+}
+.menu-pca .menu-link i {
+  color: #6f42c1; /* Icône violette */
+}
+
+/* Alert Management (Rouge) */
+.menu-alert .menu-link {
+  background-color: #ffe5e7; /* Rouge clair pour le fond non actif */
+  color: #dc3545; /* Texte rouge */
+}
+.menu-alert .menu-link:hover:not(.active) {
+  background-color: #f8d7da; /* Rouge légèrement plus foncé au survol */
+}
+.menu-alert .menu-link i {
+  color: #dc3545; /* Icône rouge */
+}
+
+/* Style général pour les sous-menus */
+.menu-sub .menu-link {
+  padding-left: 30px; /* Indentation pour les sous-menus */
+}
+/* Rectangle avec bordure pour Notification et User Management */
+.menu-section-with-border {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  background-color: #ffffff;
+  position: relative;
+}
+
+/* Séparation orange entre chaque section */
+.menu-item {
+  border-bottom: 3px solid #ff6600; /* Ligne orange comme dans l'image */
+  margin-bottom: 10px;
+}
