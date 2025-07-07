@@ -8,8 +8,6 @@ import { AuthInterceptor } from './auth.interceptor';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponentComponent } from './header-component/header-component.component';
 import { ListComponent } from './list/list.component';
-import { NotificationFormComponent } from './notification-form/notification-form.component';
-import { NotificationHistoryComponent } from './notification-history/notification-history.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { NotificationConsultComponent } from './notification-consult/notification-consult.component';
 import { AlerteComponent } from './alerte/alerte.component';
@@ -32,7 +30,6 @@ const routes: Routes = [
   { path: 'security/dashboard', component: SecurityDashboardComponent},
   { path: 'header',component:HeaderComponentComponent},
   { path: 'list',component:ListComponent},
-  {path:'SendNotification',component:NotificationFormComponent},
   {path:'reset-password',component:ResetPasswordComponent},
   {path:'Sidebar',component:SidebarComponent},
   { path: 'notificationConsult/:id/view', component: NotificationConsultComponent, canActivate: [authGuard] },

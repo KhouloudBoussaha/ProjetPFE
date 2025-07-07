@@ -44,12 +44,7 @@
       </span>
 
       <div class="menu-sub menu-sub-accordion">
-        <div *ngIf="displaySendNotification" class="menu-item">
-          <a class="menu-link" [routerLink]="'/SendNotification'" [class.active]="router.url.includes('/SendNotification')">
-            <i class="bi bi-send"></i>
-            <span class="menu-title">Send Notification</span>
-          </a>
-        </div>
+       
         <div *ngIf="displayConfirmationStatus" class="menu-item">
           <a class="menu-link" [routerLink]="'/dashboard'" [class.active]="router.url.includes('/dashboard')">
             <i class="bi bi-check-circle"></i>
@@ -172,4 +167,3 @@
     </button>
   </div>
 </div>
-

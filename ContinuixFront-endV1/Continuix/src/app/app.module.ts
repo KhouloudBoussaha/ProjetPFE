@@ -16,9 +16,7 @@ import{register} from 'swiper/element/bundle';
 import { HeaderComponentComponent } from './header-component/header-component.component';
 import { ListComponent } from './list/list.component';
 import { AuthInterceptor } from './auth.interceptor';
-import { NotificationFormComponent } from './notification-form/notification-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NotificationHistoryComponent } from './notification-history/notification-history.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { NotificationConsultComponent } from './notification-consult/notification-consult.component';
 import { AlerteComponent } from './alerte/alerte.component'; 
@@ -50,8 +48,7 @@ register();
     HomeComponent,
     HeaderComponentComponent,
     ListComponent,
-    NotificationFormComponent,
-    NotificationHistoryComponent,
+   
     ResetPasswordComponent,
     NotificationConsultComponent,
     PCAComponent,
