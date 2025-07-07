@@ -1,4 +1,0 @@
-@import 'animate.css';
-.container { background-color: transparent; }
-.robot-head { transition: fill 0.3s ease; }
-.particle { transition: all 1.5s linear; }
