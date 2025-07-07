@@ -1,0 +1,12 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h2>PCA : {{ pca.label }}</h2>
+    <p><strong>Type d'incident :</strong> {{ pca.incidentType }}</p>
+    <p><strong>Impact :</strong> {{ pca.impact }}</p>
+    <p><strong>Action recommandée :</strong> {{ pca.recommendedAction }}</p>
+    <p><strong>Détails :</strong> {{ pca.additionalDetails }}</p>
+
+    <button (click)="closeDialog()">Fermer</button>
+  </div>
+</div>
+

@@ -1,0 +1,72 @@
+.main-content {
+  /* Ce margin est déjà géré par #kt_app_main */
+  margin-left: 0;
+}
+.alert-title {
+  color: red;
+  font-size: 2rem;       /* plus gros */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem; /* un petit espace en dessous */
+}
+
+.alert-description {
+  text-align: center;
+  font-size: 1rem;
+  color: #555;          /* gris clair pour la description */
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-style: italic;
+  margin-bottom: 10rem;
+}
+
+.content-inner {
+  max-width: 100%;
+  overflow: visible;
+  height: auto;
+}
+.table-container {
+ background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+ 
+   /* Positionnement absolu par rapport à app-main-content */
+ /* Position depuis le bas, ajustez cette valeur selon vos besoins */
+ 
+   /* Ajustez cette valeur pour remonter le formulaire */
+ 
+  /* Augmentez le z-index pour le placer au-dessus de l'image */
+  color: black !important;
+}
+.alert-card {
+  background: #fefefe;
+  border-left: 6px solid #0d6efd;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+.alert-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 6px 12px;
+}
+
+.badge.HIGH {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge.MEDIUM {
+  background-color: #ffc107;
+  color: black;
+}
+
+.badge.LOW {
+  background-color: #28a745;
+  color: white;
+}

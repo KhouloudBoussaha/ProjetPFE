@@ -1,0 +1,22 @@
+<div class="organigramme-layout">
+  <div class="levels-column">
+    <div class="level-item">Niveau 1</div>
+    <div class="level-item">Niveau 2</div>
+    <div class="level-item">Niveau 3</div>
+    <div class="level-item">Niveau 4</div>
+    <!-- Ajoute d’autres niveaux si besoin -->
+  </div>
+
+  <div class="organigramme-column">
+    <h2 class="organigram-title">Organigramme</h2>
+    <p *ngIf="orgChart.length === 0">Chargement des données...</p>
+    <p-organizationChart [value]="orgChart" [collapsible]="true" selectionMode="single">
+      <ng-template let-node pTemplate="default">
+        <div class="node" [ngStyle]="{'background-color': node.data.accepted ? 'lightgreen' : 'lightcoral'}">
+          <div><strong>{{ node.data.name }}</strong></div>
+          <div>{{ node.data.role }}</div>
+        </div>
+      </ng-template>
+    </p-organizationChart>
+  </div>
+</div>

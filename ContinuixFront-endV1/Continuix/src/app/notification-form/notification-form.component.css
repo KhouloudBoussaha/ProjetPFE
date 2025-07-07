@@ -1,0 +1,37 @@
+/* Conteneur du formulaire */
+.form-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  width: 50%;
+  position: absolute; /* Positionnement absolu par rapport à app-main-content */
+bottom: -10px; /* Position depuis le bas, ajustez cette valeur selon vos besoins */
+ 
+   /* Ajustez cette valeur pour remonter le formulaire */
+ margin-left: 400px;
+  /* Augmentez le z-index pour le placer au-dessus de l'image */
+  color: black !important;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+/* Étiquettes en gras */
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block; /* Pour que le label soit sur une ligne séparée */
+}
+
+/* Espacement entre les champs */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+

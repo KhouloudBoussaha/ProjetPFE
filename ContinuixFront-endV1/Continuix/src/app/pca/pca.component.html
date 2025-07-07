@@ -1,0 +1,215 @@
+<!-- Create PCA Form -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title alert-title">Set Up a New PCA</h5>
+    <form [formGroup]="pcaForm" (ngSubmit)="createPCA()">
+      <div class="mb-3">
+        <label for="incidentType" class="form-label">Incident Type</label>
+        <select
+          class="form-select"
+          id="incidentType"
+          formControlName="incidentType"
+          [ngClass]="{'is-invalid': pcaForm.get('incidentType')?.invalid && pcaForm.get('incidentType')?.touched}"
+          required
+        >
+          <option value="">-- Select Incident Type --</option>
+          <option *ngFor="let type of incidentTypes" [value]="type">{{ type }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="pcaForm.get('incidentType')?.hasError('required') && pcaForm.get('incidentType')?.touched">
+          Incident Type is required.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="impact" class="form-label">Impact</label>
+        <select
+          class="form-select"
+          id="impact"
+          formControlName="impact"
+          [ngClass]="{'is-invalid': pcaForm.get('impact')?.invalid && pcaForm.get('impact')?.touched}"
+          required
+        >
+          <option value="">-- Select Impact --</option>
+          <option *ngFor="let impact of impacts" [value]="impact">{{ impact }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="pcaForm.get('impact')?.hasError('required') && pcaForm.get('impact')?.touched">
+          Impact is required.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="recommendedAction" class="form-label">Recommended Action</label>
+        <input
+          type="text"
+          class="form-control"
+          id="recommendedAction"
+          formControlName="recommendedAction"
+          [ngClass]="{'is-invalid': pcaForm.get('recommendedAction')?.invalid && pcaForm.get('recommendedAction')?.touched}"
+          required
+        >
+        <div class="invalid-feedback" *ngIf="pcaForm.get('recommendedAction')?.hasError('required') && pcaForm.get('recommendedAction')?.touched">
+          Recommended Action is required.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="additionalDetails" class="form-label">Additional Details</label>
+        <textarea
+          class="form-control"
+          id="additionalDetails"
+          formControlName="additionalDetails"
+          [ngClass]="{'is-invalid': pcaForm.get('additionalDetails')?.invalid && pcaForm.get('additionalDetails')?.touched}"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="groupName" class="form-label">Group</label>
+        <select
+          class="form-select"
+          id="groupName"
+          formControlName="groupName"
+          [ngClass]="{'is-invalid': pcaForm.get('groupName')?.invalid && pcaForm.get('groupName')?.touched}"
+          required
+        >
+          <option value="">-- Select Group --</option>
+          <option *ngFor="let group of groups" [value]="group.name">{{ group.name }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="pcaForm.get('groupName')?.hasError('required') && pcaForm.get('groupName')?.touched">
+          Group is required.
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="pcaForm.invalid">Create</button>
+    </form>
+  </div>
+</div>
+
+<!-- PCA List -->
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">PCA Dashboard</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Incident Type</th>
+          <th>Impact</th>
+          <th>Recommended Action</th>
+          <th>Details</th>
+          <th>Group</th>
+          <th>Label</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pca of pcas">
+          <td>{{ pca.incidentType }}</td>
+          <td>
+            <span class="badge rounded-pill" [ngClass]="getImpactBadgeClass(pca.impact)">
+              {{ pca.impact }}
+            </span>
+          </td>
+          <td>{{ pca.recommendedAction }}</td>
+          <td>{{ pca.additionalDetails || 'N/A' }}</td>
+          <td>{{ pca.groupe?.name || 'N/A' }}</td>
+          <td>{{ pca.label || 'N/A' }}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-warning me-2" (click)="editPCA(pca)">Modifier</button>
+            <button class="btn btn-sm btn-danger" (click)="deletePCA(pca.id!)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Edit PCA Modal -->
+<div
+  class="modal fade"
+  #editModal
+  tabindex="-1"
+  aria-labelledby="editModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Modifier PCA</h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="mb-3">
+            <label for="editIncidentType" class="form-label">Incident Type</label>
+            <select
+              class="form-select"
+              id="editIncidentType"
+              formControlName="incidentType"
+              [ngClass]="{'is-invalid': editForm.get('incidentType')?.invalid && editForm.get('incidentType')?.touched}"
+              required
+            >
+              <option value="">-- Select Incident Type --</option>
+              <option *ngFor="let type of incidentTypes" [value]="type">{{ type }}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="editForm.get('incidentType')?.hasError('required') && editForm.get('incidentType')?.touched">
+              Incident Type is required.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="editImpact" class="form-label">Impact</label>
+            <select
+              class="form-select"
+              id="editImpact"
+              formControlName="impact"
+              [ngClass]="{'is-invalid': editForm.get('impact')?.invalid && editForm.get('impact')?.touched}"
+              required
+            >
+              <option value="">-- Select Impact --</option>
+              <option *ngFor="let impact of impacts" [value]="impact">{{ impact }}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="editForm.get('impact')?.hasError('required') && editForm.get('impact')?.touched">
+              Impact is required.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="editRecommendedAction" class="form-label">Recommended Action</label>
+            <input
+              type="text"
+              class="form-control"
+              id="editRecommendedAction"
+              formControlName="recommendedAction"
+              [ngClass]="{'is-invalid': editForm.get('recommendedAction')?.invalid && editForm.get('recommendedAction')?.touched}"
+              required
+            >
+            <div class="invalid-feedback" *ngIf="editForm.get('recommendedAction')?.hasError('required') && editForm.get('recommendedAction')?.touched">
+              Recommended Action is required.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="editAdditionalDetails" class="form-label">Additional Details</label>
+            <textarea
+              class="form-control"
+              id="editAdditionalDetails"
+              formControlName="additionalDetails"
+              [ngClass]="{'is-invalid': editForm.get('additionalDetails')?.invalid && editForm.get('additionalDetails')?.touched}"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="editGroupName" class="form-label">Group</label>
+            <select
+              class="form-select"
+              id="editGroupName"
+              formControlName="groupName"
+              [ngClass]="{'is-invalid': editForm.get('groupName')?.invalid && editForm.get('groupName')?.touched}"
+              required
+            >
+              <option value="">-- Select Group --</option>
+              <option *ngFor="let group of groups" [value]="group.name">{{ group.name }}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="editForm.get('groupName')?.hasError('required') && editForm.get('groupName')?.touched">
+              Group is required.
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="updatePCA()" [disabled]="editForm.invalid">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
