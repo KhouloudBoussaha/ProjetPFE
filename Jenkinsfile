@@ -26,11 +26,27 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('ContinuixV1') { // 📌 Remplace par le bon dossier s’il est différent
+                dir('ContinuixV1') { // 
                     sh 'mvn clean install'
                 }
             }
         }
+stage('JaCoCo Coverage Report') {
+  steps {
+    dir('ContinuixFront-endV1/Continuix') {
+      sh 'mvn verify'
+    }
+  }
+}
+
+ stage('sonarqube') {
+            steps {
+                dir('Sonarqube') { // 
+                    sh 'mvn sonar:sonar-Dsonar.login=admin -Dsonar.password=Khouloud793+'
+                }
+            }
+        }
+
     }
 
     post {
