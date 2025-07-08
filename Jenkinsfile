@@ -2,19 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Testing Maven') {
-            steps {
-                sh 'mvn -version'
-            }
-        }
-stage('Build Frontend') {
-  steps {
-    dir('frontend') {
-      sh 'npm install'
-      sh 'ng build --configuration production'
-    }
-  }
-}
 
         stage('Checkout') {
             steps {
@@ -22,9 +9,24 @@ stage('Build Frontend') {
             }
         }
 
-        stage('Build') {
+        stage('Test Maven') {
             steps {
-                dir('ContinuixV1') {  // Adapte ce chemin si ton projet a un autre nom
+                sh 'mvn -version'
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('ContinuixFront-endV1/Continuix') { 
+                    sh 'npm install'
+                    sh 'ng build --configuration production'
+                }
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                dir('ContinuixV1') { // 📌 Remplace par le bon dossier s’il est différent
                     sh 'mvn clean install'
                 }
             }
