@@ -7,6 +7,14 @@ pipeline {
                 sh 'mvn -version'
             }
         }
+stage('Build Frontend') {
+  steps {
+    dir('frontend') {
+      sh 'npm install'
+      sh 'ng build --configuration production'
+    }
+  }
+}
 
         stage('Checkout') {
             steps {
