@@ -31,7 +31,7 @@ pipeline {
             }
         }
 
-    stages {
+    
         stage('SonarQube Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
@@ -41,7 +41,7 @@ pipeline {
                 }
             }
         }
-    }
+    
 
     post {
         success {
