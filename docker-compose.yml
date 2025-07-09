@@ -1,26 +1,15 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:13
-    container_name: db_postgres
-    environment:
-      POSTGRES_DB: continuix_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password123
-    ports:
-      - "5432:5432"
-    networks:
-      - continuix_net
 
   backend:
     build:
       context: ./ContinuixV1
     container_name: backend_service
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/continuix_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/nouvellebase
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password123
+      SPRING_DATASOURCE_PASSWORD: NouveauMotDePasse123!
     depends_on:
       - postgres
     ports:
