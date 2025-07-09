@@ -33,12 +33,14 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                dir('ContinuixV1') {
-                    sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Khouloud793+'
-                }
+      steps {
+        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+            dir('ContinuixV1') {
+                sh 'mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN'
             }
         }
+    }
+
 
     }
 
