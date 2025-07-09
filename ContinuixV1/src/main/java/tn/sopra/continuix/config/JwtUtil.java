@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import tn.sopra.continuix.services.UserDetailsImpl;
 
 import java.security.Key;
@@ -13,8 +14,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-@Component
+@Service
 public class JwtUtil {
 
     private final Key secretKey;

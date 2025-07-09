@@ -56,5 +56,13 @@ stage('JaCoCo Coverage Report') {
         failure {
             echo '❌ Échec du pipeline.'
         }
+ always {
+            // Publier les résultats JUnit (chemin standard Maven)
+            junit 'ContinuixV1/target/surefire-reports/*.xml'
+
+            // Publier le rapport Jacoco (nécessite plugin Jacoco dans Jenkins)
+            jacoco(execPattern: 'ContinuixV1/target/jacoco.exec')
+        }
+
     }
 }
