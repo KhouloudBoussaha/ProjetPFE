@@ -33,7 +33,7 @@ pipeline {
         }
 stage('JaCoCo Coverage Report') {
   steps {
-    dir('ContinuixFront-endV1/Continuix') {
+    dir('ContinuixV1') {
       sh 'mvn verify'
     }
   }
