@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -32,27 +31,31 @@ pipeline {
             }
         }
 
- stage('SonarQube Analysis') {
-    steps {
-        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            dir('ContinuixV1') {
-                sh "mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN"
+        stage('SonarQube Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                    dir('ContinuixV1') {
+                        sh "mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN"
+                    }
+                }
             }
         }
     }
-}
-  
+
     post {
         success {
             echo '🎉 Build réussi !'
         }
+
         failure {
             echo '❌ Échec du pipeline.'
         }
+
         always {
+            // 📄 Rapport des tests JUnit
             junit 'ContinuixV1/target/surefire-reports/*.xml'
 
-            // Cette étape nécessite le plugin JaCoCo Jenkins
+            // 📊 Couverture JaCoCo (le plugin Jenkins JaCoCo doit être installé)
             jacoco(execPattern: 'ContinuixV1/target/jacoco.exec')
         }
     }
