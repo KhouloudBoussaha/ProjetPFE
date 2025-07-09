@@ -26,23 +26,16 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('ContinuixV1') { // 
-                    sh 'mvn clean install'
+                dir('ContinuixV1') {
+                    sh 'mvn clean verify'
                 }
             }
         }
-stage('JaCoCo Coverage Report') {
-  steps {
-    dir('ContinuixV1') {
-      sh 'mvn verify'
-    }
-  }
-}
 
- stage('sonarqube') {
+        stage('SonarQube Analysis') {
             steps {
-                dir('Sonarqube') { // 
-                    sh 'mvn sonar:sonar-Dsonar.login=admin -Dsonar.password=Khouloud793+'
+                dir('ContinuixV1') {
+                    sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Khouloud793+'
                 }
             }
         }
@@ -56,13 +49,11 @@ stage('JaCoCo Coverage Report') {
         failure {
             echo '❌ Échec du pipeline.'
         }
- always {
-            // Publier les résultats JUnit (chemin standard Maven)
+        always {
             junit 'ContinuixV1/target/surefire-reports/*.xml'
 
-            // Publier le rapport Jacoco (nécessite plugin Jacoco dans Jenkins)
+            // Cette étape nécessite le plugin JaCoCo Jenkins
             jacoco(execPattern: 'ContinuixV1/target/jacoco.exec')
         }
-
     }
 }
