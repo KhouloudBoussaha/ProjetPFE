@@ -32,18 +32,17 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-      steps {
-        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            dir('ContinuixV1') {
-                sh 'mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN'
+  stage('SonarQube Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                    dir('ContinuixV1') {
+                        sh 'mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN'
+                    }
+                }
             }
         }
     }
-
-
-    }
-
+  
     post {
         success {
             echo '🎉 Build réussi !'
