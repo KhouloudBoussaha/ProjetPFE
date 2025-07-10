@@ -12,8 +12,16 @@ services:
     ports:
       - "8081:8080"
     networks:
-      - continuix_net
-
+      - continuix_net 
+    prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - continuix_net    
   frontend:
     build:
       context: ./ContinuixFront-endV1/Continuix
