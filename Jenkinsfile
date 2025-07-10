@@ -46,8 +46,8 @@ pipeline {
             steps {
                 script {
                     echo "🔧 Construction et lancement des conteneurs..."
-                    sh 'docker-compose down || true'  // Arrêt propre s'il tournait déjà
-                    sh 'docker-compose up --build -d' // Lancement en mode détaché
+                    sh 'docker compose down || true'  // Arrêt propre s'il tournait déjà
+                    sh 'docker compose up --build -d' // Lancement en mode détaché
                 }
             }
         }
