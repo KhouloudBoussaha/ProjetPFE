@@ -1,23 +1,21 @@
-# Étape 1 : build Angular
+# Étape 1 : Build Angular
 FROM node:18 AS build
 WORKDIR /app
 
-# Copier uniquement les fichiers de dépendances d'abord
+# Installer dépendances
 COPY package*.json ./
-
-# Installer Angular CLI v16 + dépendances locales
 RUN npm install -g @angular/cli@16 && npm install
 
-# Copier tout le reste du projet (code source Angular, angular.json, etc.)
+# Copier tout le code Angular
 COPY . .
 
-# Builder l'application
-RUN npm run build --configuration production
+# Build avec le nom correct du projet Angular
+RUN ng build Continuix --configuration production
 
-# Étape 2 : servir avec NGINX
+# Étape 2 : NGINX pour servir l'app
 FROM nginx:stable-alpine
 
-# Copier le build généré vers le dossier NGINX
+# Copier les fichiers compilés (note : dist/**continuix**)
 COPY --from=build /app/dist/continuix /usr/share/nginx/html
 
 EXPOSE 80
