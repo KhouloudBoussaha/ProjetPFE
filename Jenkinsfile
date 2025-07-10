@@ -18,7 +18,7 @@ pipeline {
             steps {
                 dir('ContinuixFront-endV1/Continuix') { 
                     sh 'npm install'
-                    sh 'ng build --configuration production'
+                  sh 'export NODE_OPTIONS=--max_old_space_size=4096 && ng build --configuration production'
                 }
             }
         }
