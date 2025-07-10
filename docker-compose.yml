@@ -1,4 +1,3 @@
-
 services:
 
   backend:
@@ -6,22 +5,14 @@ services:
       context: ./ContinuixV1
     container_name: backend_service
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/nouvellebase
+      SPRING_DATASOURCE_URL: jdbc:postgresql://my-postgres:5432/nouvellebase
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: NouveauMotDePasse123!
     ports:
       - "8081:8080"
     networks:
-      - continuix_net 
-    prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-    networks:
-      - continuix_net    
+      - continuix_net
+
   frontend:
     build:
       context: ./ContinuixFront-endV1/Continuix
@@ -33,6 +24,15 @@ services:
     networks:
       - continuix_net
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - continuix_net
+
 networks:
   continuix_net:
- 
